@@ -1,0 +1,31 @@
+{
+  "name": "cryptopia-token-contracts",
+  "version": "1.0.0",
+  "description": "Cryptopia Token system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Cryptopia",
+    "game",
+    "web3",
+    "blockchain"
+  ],
+  "author": "Frank Bonnet",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "hardhat": "^2.11.2",
+    "hardhat-erc1820": "^0.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "nethereum-codegen": "^1.0.26",
+    "chalk": "^3.0.0",
+    "ora-classic": "^5.4.2"
+  }
+}

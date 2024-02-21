@@ -101,6 +101,23 @@ describe("Polygon", function () {
                 .revertedWithCustomError(cryptosTokenInstance, "Unauthorized");
         });
 
+        it ("Cannot deposit to null address", async () => {
+                
+            // Setup
+            const amount = ethers.utils.parseEther("100");
+            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
+            const depositorSigner = ethers.provider.getSigner(depositor);
+
+            // Act
+            const operation = cryptosTokenInstance
+                .connect(depositorSigner)
+                .deposit(ethers.constants.AddressZero, amountEncoded);
+            
+            // Assert
+            await expect(operation).to.be
+                .revertedWithCustomError(cryptosTokenInstance, "ArgumentZeroAddress");
+         });
+
         it ("Polyong bridge (depositor) can deposit", async () => {
 
             // Setup
@@ -116,6 +133,24 @@ describe("Polygon", function () {
             // Assert
             const receiverBalance = await cryptosTokenInstance.balanceOf(receiver);
             expect(receiverBalance).to.equal(amount);
+        });
+
+        it ("Should emit Deposit event", async () => {
+
+            // Setup
+            const amount = ethers.utils.parseEther("100");
+            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
+            const depositorSigner = ethers.provider.getSigner(depositor);
+
+            // Act
+            const operation = cryptosTokenInstance
+                .connect(depositorSigner)
+                .deposit(receiver, amountEncoded);
+
+            // Assert
+            await expect(operation).to
+                .emit(cryptosTokenInstance, "Deposit")
+                .withArgs(receiver, amount);
         });
     });
 
@@ -158,7 +193,7 @@ describe("Polygon", function () {
         it ("Should withdraw deposited tokens", async () => {
 
             // Setup
-            const withdrawAmount = depositAmount;
+            const withdrawAmount = ethers.utils.parseEther("100");;
             const withdrawerSigner = ethers.provider.getSigner(withdrawer);
 
             const totalSupplyBefore = await cryptosTokenInstance.totalSupply();
@@ -175,6 +210,99 @@ describe("Polygon", function () {
             // Assert
             expect(totalSupplyAfter).to.equal(totalSupplyBefore.sub(withdrawAmount));
             expect(withdrawerBalanceAfter).to.equal(withdrawerBalanceBefore.sub(withdrawAmount));
+        });
+
+        it ("Should emit Withdraw event", async () => {
+
+            // Setup
+            const withdrawAmount = ethers.utils.parseEther("100");
+            const withdrawerSigner = ethers.provider.getSigner(withdrawer);
+
+            // Act
+            const operation = cryptosTokenInstance
+                .connect(withdrawerSigner)
+                .withdraw(withdrawAmount);
+
+            // Assert
+            await expect(operation).to
+                .emit(cryptosTokenInstance, "Withdraw")
+                .withArgs(withdrawer, withdrawAmount);
+        });
+    });
+
+    /**
+     * Test failsafe    
+     */
+    describe("Failsafe", function () {
+
+        // Setup
+        const lostAmount = ethers.utils.parseEther("999");
+
+        /**
+         * Deposit tokens by accident
+         */
+        before(async () => {
+            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [lostAmount]);
+            const depositorSigner = ethers.provider.getSigner(depositor);
+
+            await cryptosTokenInstance
+                .connect(depositorSigner)
+                .deposit(cryptosTokenInstance.address, amountEncoded);
+        });
+
+        it ("Non-Admin should not be able to retrieve tokens", async () => {
+                
+                // Setup
+                const tokenAddress = cryptosTokenInstance.address;
+                const nonAdminSigner = ethers.provider.getSigner(other);
+ 
+                // Act
+                const operation = cryptosTokenInstance
+                    .connect(nonAdminSigner)
+                    .retrieveTokens(tokenAddress);
+
+                // Assert
+                await expect(operation).to.be
+                    .revertedWithCustomError(cryptosTokenInstance, "AccessControlUnauthorizedAccount")
+                    .withArgs(other, await cryptosTokenInstance.DEFAULT_ADMIN_ROLE());
+        });
+
+        it ("Admin should be able to retrieve tokens", async () => {
+                
+            // Setup
+            const tokenAddress = cryptosTokenInstance.address;
+            const balanceBefore = await cryptosTokenInstance.balanceOf(deployer);
+
+            // Act
+            await cryptosTokenInstance.retrieveTokens(tokenAddress);
+
+            // Assert
+            const balanceAfter = await cryptosTokenInstance.balanceOf(deployer);
+            expect(balanceAfter).to.equal(balanceBefore.add(lostAmount));
+
+            const balanceContract = await cryptosTokenInstance.balanceOf(tokenAddress);
+            expect(balanceContract).to.equal(0);
+        });
+
+        it ("Should emit RetrieveTokens event", async () => {
+                
+            // Setup
+            const tokenAddress = cryptosTokenInstance.address;
+            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [lostAmount]);
+            const depositorSigner = ethers.provider.getSigner(depositor);
+
+            await cryptosTokenInstance
+                .connect(depositorSigner)
+                .deposit(cryptosTokenInstance.address, amountEncoded);
+            
+            // Act
+            const operation = cryptosTokenInstance
+                .retrieveTokens(tokenAddress);
+
+            // Assert
+            await expect(operation).to
+                .emit(cryptosTokenInstance, "RetrieveTokens")
+                .withArgs(tokenAddress, deployer, lostAmount);
         });
     });
 });

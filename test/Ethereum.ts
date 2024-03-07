@@ -19,7 +19,7 @@ describe("Ethereum", function () {
     let cryptosTokenInstance: CryptosToken;
 
     /**
-     * Deploy Crafting Contracts
+     * Deploy Token Contract
      */
     before(async () => {
 
@@ -30,7 +30,7 @@ describe("Ethereum", function () {
         const CryptosTokenFactory = await ethers.getContractFactory("CryptosToken");
         
         // Deploy Inventories
-        cryptosTokenInstance = await CryptosTokenFactory.deploy();
+        cryptosTokenInstance = await CryptosTokenFactory.deploy(deployer);
     });
 
     /**
@@ -62,17 +62,13 @@ describe("Ethereum", function () {
             expect(actual).to.equal(expected);
         });
 
-        it ("Deployer should have the DEFAULT_ADMIN role", async () => {
+        it ("Deployer should be owner", async () => {
                 
-                // Setup
-                const expected = true;
-                const role = await cryptosTokenInstance.DEFAULT_ADMIN_ROLE();
-
                 // Act
-                const actual = await cryptosTokenInstance.hasRole(role, deployer);
+                const owner = await cryptosTokenInstance.owner();
 
                 // Assert
-                expect(actual).to.equal(expected);
+                expect(owner).to.equal(deployer);
         });
     });
 
@@ -93,7 +89,7 @@ describe("Ethereum", function () {
                 cryptosTokenInstance.address, lostAmount);
         });
 
-        it ("Non-Admin should not be able to retrieve tokens", async () => {
+        it ("Non-Owner should not be able to retrieve tokens", async () => {
                 
                 // Setup
                 const tokenAddress = cryptosTokenInstance.address;
@@ -106,11 +102,11 @@ describe("Ethereum", function () {
 
                 // Assert
                 await expect(operation).to.be
-                    .revertedWithCustomError(cryptosTokenInstance, "AccessControlUnauthorizedAccount")
-                    .withArgs(other, await cryptosTokenInstance.DEFAULT_ADMIN_ROLE());
+                    .revertedWithCustomError(cryptosTokenInstance, "OwnableUnauthorizedAccount")
+                    .withArgs(other);
         });
 
-        it ("Admin should be able to retrieve tokens", async () => {
+        it ("Owner should be able to retrieve tokens", async () => {
                 
             // Setup
             const tokenAddress = cryptosTokenInstance.address;

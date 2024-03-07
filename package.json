@@ -15,17 +15,24 @@
   "author": "Frank Bonnet",
   "license": "ISC",
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.1"
+    "@layerzerolabs/lz-evm-oapp-v2": "^2.1.13",
+    "@openzeppelin/contracts": "^5.0.2"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "@openzeppelin/test-helpers": "^0.5.16",
+    "@layerzerolabs/lz-v2-utilities": "^2.1.13",
+    "@layerzerolabs/test-devtools-evm-hardhat": "^0.1.8",
+    "chalk": "^3.0.0",
     "hardhat": "^2.11.2",
     "hardhat-erc1820": "^0.1.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3",
     "nethereum-codegen": "^1.0.26",
-    "chalk": "^3.0.0",
-    "ora-classic": "^5.4.2"
+    "ora-classic": "^5.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "overrides": {
+    "@openzeppelin/contracts": "^5.0.2",
+    "@openzeppelin/contracts-upgradeable": "^5.0.2"
   }
 }

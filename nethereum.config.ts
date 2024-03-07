@@ -6,8 +6,9 @@ const config : NethereumConfig =
     lang: 0, // CSharp 0, Vb.Net 1, FSharp 3
     autoCodeGen: true,
     contracts: [
-        "CryptopiaERC20",
+        "CryptopiaTokenRetriever",
         "CryptosToken",
+        "CryptosTokenOFTAdapter",
         "CryptosTokenPolygon"
     ]
 }

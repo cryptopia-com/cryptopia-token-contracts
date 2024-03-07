@@ -1,4 +1,5 @@
-import { HardhatUserConfig } from "hardhat/config";
+import { HardhatUserConfig, task } from "hardhat/config";
+import { LayerZeroConfig } from './scripts/types/LayerZeroConfig';
 import "@nomicfoundation/hardhat-toolbox";
 
 const secret = JSON.parse(
@@ -10,11 +11,11 @@ const secret = JSON.parse(
 const config: HardhatUserConfig = {
   networks: {
     hardhat: {},
-    ethereumGoerli: {
-      url: "https://go.getblock.io/79e554c44ca544ba885b4728daf91a54",
-      chainId: 5,
+    ethereumSepolia: {
+      url: "https://go.getblock.io/b4c5e41104bc47feb4993830c820957f",
+      chainId: 11155111,
       accounts: {
-        mnemonic: secret.ethereumGoerli.mnemonic,
+        mnemonic: secret.ethereumSepolia.mnemonic,
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -31,7 +32,7 @@ const config: HardhatUserConfig = {
       }
     },
     polygonMumbai: {
-      url: "https://go.getblock.io/b0287fc41bb446f196b744cc5471be37",
+      url: "https://go.getblock.io/07d076840042416eb75709631abdb21a",
       chainId: 80001,
       accounts: {
         mnemonic: secret.polygonMumbai.mnemonic,
@@ -82,7 +83,7 @@ const config: HardhatUserConfig = {
     }
   },
   solidity: {
-    version: "0.8.20",
+    version: "0.8.22",
     settings: {
       optimizer: {
         enabled: true,
@@ -127,3 +128,80 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
+
+export interface NetworkConfig {
+  layerZero: LayerZeroConfig;
+}
+
+interface AppConfig {
+  networks: {
+      [key: string]: NetworkConfig;
+  };
+}
+
+/**
+ * Load the configuration for the specified network
+ * 
+ * @param network to load the configuration for
+ * @returns the configuration for the specified network
+ */
+async function loadConfigAsync(network: string) : Promise<AppConfig>
+{
+  try {
+    return (await import(`./app.${network}.config`)).default;
+  } 
+  catch (error) 
+  {
+    console.error("Failed to load the configuration:", error);
+    return Promise.reject(error); 
+  }
+}
+
+/**
+ * Bridge tokens
+ * 
+ * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount 100
+ */
+task("bridge", "Transfer tokens between blockchains")
+  .addParam("origin", "The network to bridge from")
+  .addParam("destination", "The network to bridge to")
+  .addParam("amount", "The amount of tokens to bridge")
+  .setAction(async (taskArguments, hre) =>
+  {
+    // Config
+    const isDevEnvironment = hre.network.name == "hardhat" 
+        || hre.network.name == "ganache" 
+        || hre.network.name == "localhost";
+
+    const appConfig = await loadConfigAsync(origin);
+    const config = appConfig.networks[
+        isDevEnvironment ? "development" : hre.network.name];
+
+    const endpoint = config.layerZero.endpoint;
+    const peer = config.layerZero.peers[taskArguments.origin];
+
+    const deploymentManager = new DeploymentManager(
+        hre.network.name, config.development);
+
+    let to = "";
+    if (taskArguments.inventory == "Backpack" || taskArguments.inventory == "Ship")
+    {
+      const inventoriesDeployment = await deploymentManager.getContractDeployment(deploymentManager.resolveContractName("Inventories"));
+      to = inventoriesDeployment.address;
+    }
+    else
+    {
+      to = taskArguments.to;
+    }
+
+    const tokenDeployment = await deploymentManager.getContractDeployment(deploymentManager.resolveDeploymentKey("AssetToken:" + taskArguments.resource));
+    const tokenInstance = await hre.ethers.getContractAt(deploymentManager.resolveContractName("AssetToken"), tokenDeployment.address);
+    await tokenInstance.__mintTo(to, taskArguments.amount);
+
+    if (taskArguments.inventory == "Backpack" || taskArguments.inventory == "Ship")
+    {
+      const inventoriesDeployment = await deploymentManager.getContractDeployment(deploymentManager.resolveContractName("Inventories"));
+      const inventoriesInstance = await hre.ethers.getContractAt(deploymentManager.resolveContractName("Inventories"), inventoriesDeployment.address);
+      await inventoriesInstance.__assignFungibleToken(taskArguments.to, taskArguments.inventory == "Backpack" ? 1 : 2, tokenInstance.address, taskArguments.amount);
+    }
+  });

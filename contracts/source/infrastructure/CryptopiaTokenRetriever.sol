@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: ISC
-pragma solidity 0.8.20;
+pragma solidity 0.8.22;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
 
 /// @title Cryptopia ERC20 
 /// @notice Token that extends Openzeppelin ERC20Upgradeable
 /// @dev Implements the ERC20 standard
 /// @author Frank Bonnet - <frankbonnet@outlook.com>
-abstract contract CryptopiaERC20 is ERC20, AccessControl {
+abstract contract CryptopiaTokenRetriever {
     using SafeERC20 for ERC20;
 
     /**
@@ -22,16 +21,6 @@ abstract contract CryptopiaERC20 is ERC20, AccessControl {
     event RetrieveTokens(address indexed tokenContract, address indexed account, uint value);
 
 
-    /// @dev Contract initializer
-    /// @param _name Token name (long)
-    /// @param _symbol Token ticker symbol (short)
-    constructor(string memory _name, string memory _symbol) 
-        ERC20(_name, _symbol) 
-    {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    }
-
-
     /** 
      * Admin functions
      */
@@ -39,9 +28,8 @@ abstract contract CryptopiaERC20 is ERC20, AccessControl {
     /// Allows the owner to retrieve tokens from the contract that 
     /// might have been send there by accident
     /// @param _tokenContract The address of ERC20 compatible token
-    function retrieveTokens(address _tokenContract) 
-        external  
-        onlyRole(DEFAULT_ADMIN_ROLE)  
+    function _retrieveTokens(address _tokenContract) 
+        internal   
     {
         ERC20 tokenInstance = ERC20(_tokenContract);
         uint tokenBalance = tokenInstance.balanceOf(address(this));

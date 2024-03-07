@@ -13,7 +13,7 @@ describe("Polygon", function () {
 
     // Accounts
     let deployer: string;
-    let depositor: string;
+    let polygonBridgeDepositor: string;
     let receiver: string;
     let withdrawer: string;
     let other: string;
@@ -21,19 +21,29 @@ describe("Polygon", function () {
     // Instances
     let cryptosTokenInstance: CryptosTokenPolygon;
 
+    // Settings
+    const eidPolygon = 30109;
+
     /**
-     * Deploy Crafting Contracts
+     * Deploy Token Contract
      */
     before(async () => {
 
         // Accounts
-        [deployer, depositor, receiver, withdrawer, other] = (await ethers.getSigners()).map(s => s.address);
+        [deployer, polygonBridgeDepositor, receiver, withdrawer, other] = (
+            await ethers.getSigners()).map(s => s.address);
 
         // Factories
         const CryptosTokenFactory = await ethers.getContractFactory("CryptosTokenPolygon");
+        const LayerZeroEndpointFactory = await ethers.getContractFactory("MockLayerZeroEndpoint");
         
-        // Deploy Inventories
-        cryptosTokenInstance = await CryptosTokenFactory.deploy(depositor);
+        // Deploy endpoint
+        const layerZeroEndpointInstance = await LayerZeroEndpointFactory.deploy(eidPolygon);
+        const layerZeroEndpointAddress = await layerZeroEndpointInstance.address;
+
+        // Deploy token
+        cryptosTokenInstance = await CryptosTokenFactory.deploy(
+            polygonBridgeDepositor, layerZeroEndpointAddress, deployer);
     });
 
     /**
@@ -56,26 +66,22 @@ describe("Polygon", function () {
         it ("Polygon bridge is set as depositor", async () => {
 
             // Setup
-            const expected = depositor;
+            const expected = polygonBridgeDepositor;
 
             // Act
-            const actual = await cryptosTokenInstance.depositor();
+            const actual = await cryptosTokenInstance.polygonBridgeDepositor();
 
             // Assert
             expect(actual).to.equal(expected);
         });
 
-        it ("Deployer should have the DEFAULT_ADMIN role", async () => {
+        it ("Deployer should be owner", async () => {
                 
-                // Setup
-                const expected = true;
-                const role = await cryptosTokenInstance.DEFAULT_ADMIN_ROLE();
-
                 // Act
-                const actual = await cryptosTokenInstance.hasRole(role, deployer);
+                const owner = await cryptosTokenInstance.owner();
 
                 // Assert
-                expect(actual).to.equal(expected);
+                expect(owner).to.equal(deployer);
         });
     });
 
@@ -106,7 +112,7 @@ describe("Polygon", function () {
             // Setup
             const amount = ethers.utils.parseEther("100");
             const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
-            const depositorSigner = ethers.provider.getSigner(depositor);
+            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             // Act
             const operation = cryptosTokenInstance
@@ -123,7 +129,7 @@ describe("Polygon", function () {
             // Setup
             const amount = ethers.utils.parseEther("100");
             const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
-            const depositorSigner = ethers.provider.getSigner(depositor);
+            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             // Act
             await cryptosTokenInstance
@@ -140,7 +146,7 @@ describe("Polygon", function () {
             // Setup
             const amount = ethers.utils.parseEther("100");
             const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
-            const depositorSigner = ethers.provider.getSigner(depositor);
+            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             // Act
             const operation = cryptosTokenInstance
@@ -167,7 +173,7 @@ describe("Polygon", function () {
          */
         before(async () => {
             const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [depositAmount]);
-            const depositorSigner = ethers.provider.getSigner(depositor);
+            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             await cryptosTokenInstance
                 .connect(depositorSigner)
@@ -243,14 +249,14 @@ describe("Polygon", function () {
          */
         before(async () => {
             const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [lostAmount]);
-            const depositorSigner = ethers.provider.getSigner(depositor);
+            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             await cryptosTokenInstance
                 .connect(depositorSigner)
                 .deposit(cryptosTokenInstance.address, amountEncoded);
         });
 
-        it ("Non-Admin should not be able to retrieve tokens", async () => {
+        it ("Non-Owner should not be able to retrieve tokens", async () => {
                 
                 // Setup
                 const tokenAddress = cryptosTokenInstance.address;
@@ -263,11 +269,11 @@ describe("Polygon", function () {
 
                 // Assert
                 await expect(operation).to.be
-                    .revertedWithCustomError(cryptosTokenInstance, "AccessControlUnauthorizedAccount")
-                    .withArgs(other, await cryptosTokenInstance.DEFAULT_ADMIN_ROLE());
+                    .revertedWithCustomError(cryptosTokenInstance, "OwnableUnauthorizedAccount")
+                    .withArgs(other);
         });
 
-        it ("Admin should be able to retrieve tokens", async () => {
+        it ("Owner should be able to retrieve tokens", async () => {
                 
             // Setup
             const tokenAddress = cryptosTokenInstance.address;
@@ -289,7 +295,7 @@ describe("Polygon", function () {
             // Setup
             const tokenAddress = cryptosTokenInstance.address;
             const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [lostAmount]);
-            const depositorSigner = ethers.provider.getSigner(depositor);
+            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             await cryptosTokenInstance
                 .connect(depositorSigner)

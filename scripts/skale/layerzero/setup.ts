@@ -1,13 +1,13 @@
 import ora from 'ora-classic';
 import chalk from 'chalk';
 import hre, { ethers } from "hardhat"; 
-import appConfig, { NetworkConfig } from "../../../app.polygon.config";
+import appConfig, { NetworkConfig } from "../../../app.skale.config";
 import { DeploymentManager } from "../../helpers/deployments";
 import { waitForMinimumTime } from "../../helpers/timers";
 
 import { 
     MockLayerZeroEndpoint,
-    CryptosTokenPolygon,
+    CryptosTokenSkale,
 } from "../../../typechain-types";
 
 // Settins
@@ -15,15 +15,14 @@ const MIN_TIME = 100;
 
 let config: NetworkConfig;
 let deploymentManager: DeploymentManager;
-let tokenInstance: CryptosTokenPolygon;
+let tokenInstance: CryptosTokenSkale;
 let mockEndpointInstance: MockLayerZeroEndpoint;
 
 /**
  * Setup peers and endpoints
  * 
- * npx hardhat run --network localhost ./scripts/polygon/layerzero/setup.ts
- * npx hardhat run --network polygonMumbai ./scripts/polygon/layerzero/setup.ts
- * npx hardhat run --network polygonMainnet ./scripts/polygon/layerzero/setup.ts
+ * npx hardhat run --network localhost ./scripts/skale/layerzero/setup.ts
+ * npx hardhat run --network skaleEuropa ./scripts/skale/layerzero/setup.ts
  */
 async function main() {
 
@@ -39,8 +38,8 @@ async function main() {
 
     console.log(`\n\nStarting LayerZero setup on ${chalk.yellow(hre.network.name)}..`);
 
-    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenPolygon").address;
-    tokenInstance = await ethers.getContractAt("CryptosTokenPolygon", tokenAddress);
+    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenSkale").address;
+    tokenInstance = await ethers.getContractAt("CryptosTokenSkale", tokenAddress);
 
     const owner = await tokenInstance.owner();
     if (owner != deployer.address)
@@ -55,7 +54,7 @@ async function main() {
         config.layerZero.endpoint.endpointDestinations && 
         config.layerZero.endpoint.endpointDestinations?.length > 0)
     {
-        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpoint:Polygon").address;
+        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpoint:Skale").address;
         mockEndpointInstance = await ethers.getContractAt("MockLayerZeroEndpoint", mockEndpointAddress);
 
         for (let destination of config.layerZero.endpoint.endpointDestinations)

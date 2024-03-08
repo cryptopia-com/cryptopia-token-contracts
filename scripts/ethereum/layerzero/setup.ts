@@ -91,6 +91,7 @@ async function ensurePeerSet(network: string, eid: number, peer: string): Promis
     // Check if peer is already set
     if (await tokenInstance.isPeer(eid, ethers.utils.zeroPad(peerAddress, 32)))
     {
+        ora(`Skipped ${chalk.green(peer)} already configured as peer`).succeed();
         return Promise.resolve();
     }
 

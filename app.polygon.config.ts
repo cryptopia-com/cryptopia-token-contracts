@@ -15,6 +15,10 @@ const config : AppConfig = {
                         {
                             destinationToken: "CryptosTokenOFTAdapter",
                             destinationEndpoint: "MockLayerZeroEndpoint:Ethereum"
+                        },
+                        {
+                            destinationToken: "CryptosTokenSkale",
+                            destinationEndpoint: "MockLayerZeroEndpoint:Skale"
                         }
                     ]
                 },
@@ -23,6 +27,11 @@ const config : AppConfig = {
                         network: "localhost",
                         endpointId: 1,
                         token: "CryptosTokenOFTAdapter"
+                    },
+                    skale: {
+                        network: "localhost",
+                        endpointId: 3,
+                        token: "CryptosTokenSkale"
                     }
                 }
             }
@@ -42,6 +51,11 @@ const config : AppConfig = {
                         network: "ethereumSepolia",
                         endpointId: 40161,
                         token: "CryptosTokenOFTAdapter"
+                    },
+                    skale: {
+                        network: "skaleEuropaTestnet",
+                        endpointId: 40254,
+                        token: "CryptosTokenSkale"
                     }
                 }
             }

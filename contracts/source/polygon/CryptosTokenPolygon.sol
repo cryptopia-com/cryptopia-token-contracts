@@ -64,8 +64,6 @@ contract CryptosTokenPolygon is OFT, CryptopiaTokenRetriever {
     constructor(address _polygonBridgeDepositor, address _layerZeroEndpoint, address _owner ) 
         OFT("Cryptos", "TOS", _layerZeroEndpoint, _owner) Ownable(_owner)
         notNull(_polygonBridgeDepositor)
-        notNull(_layerZeroEndpoint)
-        notNull(_owner)
     {
         polygonBridgeDepositor = _polygonBridgeDepositor;
     }

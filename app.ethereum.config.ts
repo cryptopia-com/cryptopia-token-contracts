@@ -13,6 +13,10 @@ const config : AppConfig = {
                         {
                             destinationToken: "CryptosTokenPolygon",
                             destinationEndpoint: "MockLayerZeroEndpoint:Polygon"
+                        },
+                        {
+                            destinationToken: "CryptosTokenSkale",
+                            destinationEndpoint: "MockLayerZeroEndpoint:Skale"
                         }
                     ]
                 },
@@ -21,6 +25,11 @@ const config : AppConfig = {
                         network: "localhost",
                         endpointId: 2,
                         token: "CryptosTokenPolygon"
+                    },
+                    skale: {
+                        network: "localhost",
+                        endpointId: 3,
+                        token: "CryptosTokenSkale"
                     }
                 }
             }
@@ -42,6 +51,11 @@ const config : AppConfig = {
                         network: "polygonMumbai",
                         endpointId: 40109,
                         token: "CryptosTokenPolygon"
+                    },
+                    skale: {
+                        network: "skaleEuropaTestnet",
+                        endpointId: 40254,
+                        token: "CryptosTokenSkale"
                     }
                 }
             }

@@ -62,16 +62,6 @@ const config: HardhatUserConfig = {
         count: 10
       }
     },
-    skaleChaos: {
-      url: "https://staging-v3.skalenodes.com/v1/staging-fast-active-bellatrix",
-      chainId: 1351057110,
-      accounts: {
-        mnemonic: secret.skaleChaos.mnemonic,
-        path: "m/44'/60'/0'/0",
-        initialIndex: 0,
-        count: 10
-      }
-    },
     skaleNebulaTestnet: {
       url: "https://staging-v3.skalenodes.com/v1/staging-faint-slimy-achird",
       chainId: 503129905,
@@ -91,6 +81,26 @@ const config: HardhatUserConfig = {
         initialIndex: 0,
         count: 10
       }
+    },
+    skaleEuropaTestnet: {
+      url: "https://testnet.skalenodes.com/v1/juicy-low-small-testnet",
+      chainId: 1444673419,
+      accounts: {
+        mnemonic: secret.skaleEuropaTestnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
+    },
+    skaleEuropaMainnet: {
+      url: "https://mainnet.skalenodes.com/v1/elated-tan-skat",
+      chainId: 2046399126,
+      accounts: {
+        mnemonic: secret.skaleEuropaMainnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
     }
   },
   solidity: {
@@ -105,19 +115,12 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       polygonMumbai: secret.polygonMumbai.etherscan,
-      skaleChaos: secret.skaleChaos.etherscan,
       skaleNebulaTestnet: secret.skaleNebulaTestnet.etherscan,
-      skaleNebulaMainnet: secret.skaleNebulaMainnet.etherscan
+      skaleNebulaMainnet: secret.skaleNebulaMainnet.etherscan,
+      skaleEuropaTestnet: secret.skaleEuropaTestnet.etherscan,
+      skaleEuropaMainnet: secret.skaleEuropaMainnet.etherscan
     },
     customChains: [
-      {
-        network: "skaleChaos",
-        chainId: 1351057110,
-        urls: {
-            apiURL: "https://staging-fast-active-bellatrix.explorer.staging-v3.skalenodes.com/api",
-            browserURL: "https://staging-fast-active-bellatrix.explorer.staging-v3.skalenodes.com"
-        }
-      },
       {
         network: "skaleNebulaTestnet",
         chainId: 503129905,
@@ -130,8 +133,24 @@ const config: HardhatUserConfig = {
         network: "skaleNebulaMainnet",
         chainId: 1482601649,
         urls: {
-            apiURL: "https://green-giddy-denebola.explorer.mainnet.skalenodes.com//api",
-            browserURL: "https://green-giddy-denebola.explorer.mainnet.skalenodes.com/"
+            apiURL: "https://green-giddy-denebola.explorer.mainnet.skalenodes.com/api",
+            browserURL: "https://green-giddy-denebola.explorer.mainnet.skalenodes.com"
+        }
+      },
+      {
+        network: "skaleEuropaTestnet",
+        chainId: 1444673419,
+        urls: {
+            apiURL: "https://juicy-low-small-testnet.explorer.testnet.skalenodes.com/api",
+            browserURL: "https://juicy-low-small-testnet.explorer.testnet.skalenodes.com"
+        }
+      },
+      {
+        network: "skaleEuropaMainnet",
+        chainId: 2046399126,
+        urls: {
+            apiURL: "https://elated-tan-skat.explorer.mainnet.skalenodes.com/api",
+            browserURL: "https://elated-tan-skat.explorer.mainnet.skalenodes.com"
         }
       }
     ]
@@ -176,6 +195,7 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
  * 
  * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount "100"
  * npx hardhat bridge --network polygonMumbai --origin "polygon" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "ethereum" --amount "100"
  * 
  * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "polygon" --amount "100"
  * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "ethereum" --amount "100"
@@ -253,9 +273,11 @@ task("bridge", "Transfer tokens between blockchains")
    * 
    * npx hardhat balance --network localhost --chain "ethereum" 
    * npx hardhat balance --network localhost --chain "polygon" 
+   * npx hardhat balance --network localhost --chain "skale" 
    * 
    * npx hardhat balance --network ethereumSepolia --chain "ethereum" 
    * npx hardhat balance --network polygonMumbai --chain "polygon" 
+   * npx hardhat balance --network skaleEuropaTestnet --chain "skale"
    * 
    * npx hardhat balance --network ethereumMainnet --chain "ethereum" 
    * npx hardhat balance --network polygonMainnet --chain "polygon" 

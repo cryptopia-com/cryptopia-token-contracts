@@ -4,6 +4,8 @@ const config : AppConfig = {
     networks: {
         development: {
             layerZero: {
+                token: "CryptosToken",
+                adapter: "CryptosTokenOFTAdapter",
                 endpoint: {
                     endpointId: 1,
                     endpointLocation: "MockLayerZeroEndpoint",
@@ -18,7 +20,7 @@ const config : AppConfig = {
                     polygon: {
                         network: "localhost",
                         endpointId: 2,
-                        deploymentKey: "CryptosTokenPolygon"
+                        token: "CryptosTokenPolygon"
                     }
                 }
             }
@@ -29,6 +31,8 @@ const config : AppConfig = {
             pollingTimeout: 300000, // 5 minutes
             owner: "0x333E78ae5D0Cc42586dAcE93a7a9e0a26789Eb4F",
             layerZero: {
+                token: "CryptosToken",
+                adapter: "CryptosTokenOFTAdapter",
                 endpoint: {
                     endpointId: 40161,
                     endpointLocation: "0x6edce65403992e310a62460808c4b910d972f10f"
@@ -37,7 +41,7 @@ const config : AppConfig = {
                     polygon: {
                         network: "polygonMumbai",
                         endpointId: 40109,
-                        deploymentKey: "CryptosTokenPolygon"
+                        token: "CryptosTokenPolygon"
                     }
                 }
             }
@@ -48,6 +52,8 @@ const config : AppConfig = {
             pollingTimeout: 600000, // 10 minutes
             owner: "0xa25BabD8e575FF990F6dE4326633cd0371534500",
             layerZero: {
+                token: "CryptosToken",
+                adapter: "CryptosTokenOFTAdapter",
                 endpoint: {
                     endpointId: 30101,
                     endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c"
@@ -57,7 +63,7 @@ const config : AppConfig = {
                     polygon: {
                         network: "polygonMainnet",
                         endpointId: 30109,
-                        deploymentKey: "CryptosTokenPolygon"
+                        token: "CryptosTokenPolygon"
                     }
                 }
             }

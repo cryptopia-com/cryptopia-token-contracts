@@ -1,7 +1,7 @@
 export interface LayerZeroPeer {
     network: string;
     endpointId: number;
-    deploymentKey: string;
+    token: string;
 }
 
 export interface LayerZeroEndpointDestination {
@@ -16,6 +16,8 @@ export interface LayerZeroEndpoint {
 }
 
 export interface LayerZeroConfig {
+    token: string;
+    adapter?: string;
     endpoint: LayerZeroEndpoint;
     peers: {
         [key: string]: LayerZeroPeer;

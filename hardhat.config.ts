@@ -1,6 +1,17 @@
+import chalk from 'chalk';
 import { HardhatUserConfig, task } from "hardhat/config";
 import { LayerZeroConfig } from './scripts/types/LayerZeroConfig';
 import "@nomicfoundation/hardhat-toolbox";
+
+import { 
+  Options 
+} from '@layerzerolabs/lz-v2-utilities';
+
+import { 
+  MessagingFeeStruct, 
+  SendParamStruct 
+} from "./typechain-types/contracts/source/ethereum/CryptosTokenOFTAdapter.js";
+import { DeploymentManager } from "./scripts/helpers/deployments";
 
 const secret = JSON.parse(
   require('fs')
@@ -160,12 +171,20 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
 /**
  * Bridge tokens
  * 
- * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount 100
+ * npx hardhat bridge --network localhost --origin "ethereum" --destination "polygon" --amount "100"
+ * npx hardhat bridge --network localhost --origin "polygon" --destination "ethereum" --amount "100"
+ * 
+ * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount "100"
+ * npx hardhat bridge --network polygonMumbai --origin "polygon" --destination "ethereum" --amount "100"
+ * 
+ * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "polygon" --amount "100"
+ * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "ethereum" --amount "100"
  */
 task("bridge", "Transfer tokens between blockchains")
   .addParam("origin", "The network to bridge from")
   .addParam("destination", "The network to bridge to")
   .addParam("amount", "The amount of tokens to bridge")
+  .addOptionalParam("to", "The address to bridge the tokens to")
   .setAction(async (taskArguments, hre) =>
   {
     // Config
@@ -173,35 +192,98 @@ task("bridge", "Transfer tokens between blockchains")
         || hre.network.name == "ganache" 
         || hre.network.name == "localhost";
 
-    const appConfig = await loadConfigAsync(origin);
+    const appConfig = await loadConfigAsync(taskArguments.origin);
     const config = appConfig.networks[
         isDevEnvironment ? "development" : hre.network.name];
 
-    const endpoint = config.layerZero.endpoint;
-    const peer = config.layerZero.peers[taskArguments.origin];
+    const deploymentManger = new DeploymentManager(hre.network.name);
+    const peer = config.layerZero.peers[taskArguments.destination];
+    
+    const originOFTAddress = deploymentManger.getContractDeployment(
+      config.layerZero.adapter ? config.layerZero.adapter : config.layerZero.token).address;
+    const originOFTInstance = await hre.ethers.getContractAt("OFT", originOFTAddress);
 
-    const deploymentManager = new DeploymentManager(
-        hre.network.name, config.development);
+    const from = (await hre.ethers.getSigners())[0].address;
+    const to = taskArguments.to ? taskArguments.to : from;
 
-    let to = "";
-    if (taskArguments.inventory == "Backpack" || taskArguments.inventory == "Ship")
+    const amountInWei = hre.ethers.utils
+      .parseEther(taskArguments.amount)
+      .toString();
+
+    // Approve the OFT adapter to spend the tokens
+    if (config.layerZero.adapter)
     {
-      const inventoriesDeployment = await deploymentManager.getContractDeployment(deploymentManager.resolveContractName("Inventories"));
-      to = inventoriesDeployment.address;
-    }
-    else
-    {
-      to = taskArguments.to;
+        const originTokenAddress = deploymentManger.getContractDeployment(config.layerZero.token).address;
+        const originTokenInstance = await hre.ethers.getContractAt("ERC20", originTokenAddress);
+        await originTokenInstance.approve(originOFTAddress, originTokenAddress);
     }
 
-    const tokenDeployment = await deploymentManager.getContractDeployment(deploymentManager.resolveDeploymentKey("AssetToken:" + taskArguments.resource));
-    const tokenInstance = await hre.ethers.getContractAt(deploymentManager.resolveContractName("AssetToken"), tokenDeployment.address);
-    await tokenInstance.__mintTo(to, taskArguments.amount);
+    // Send the tokens
+    const extraOptions = Options.newOptions()
+        .addExecutorLzReceiveOption(200000, 0)
+        .toHex()
+        .toString();
 
-    if (taskArguments.inventory == "Backpack" || taskArguments.inventory == "Ship")
+    const sendParam: SendParamStruct = {
+        dstEid: peer.endpointId,
+        to: hre.ethers.utils.zeroPad(to, 32),
+        amountLD: amountInWei,
+        minAmountLD: amountInWei,
+        extraOptions: extraOptions,
+        composeMsg: `0x`,
+        oftCmd: `0x`
+    };
+
+    const [nativeFee] = await originOFTInstance
+        .quoteSend(sendParam, false);
+    const messagingFee: MessagingFeeStruct = {
+        nativeFee: nativeFee,
+        lzTokenFee: 0
+    };
+
+    await originOFTInstance.send(sendParam, messagingFee, to, 
     {
-      const inventoriesDeployment = await deploymentManager.getContractDeployment(deploymentManager.resolveContractName("Inventories"));
-      const inventoriesInstance = await hre.ethers.getContractAt(deploymentManager.resolveContractName("Inventories"), inventoriesDeployment.address);
-      await inventoriesInstance.__assignFungibleToken(taskArguments.to, taskArguments.inventory == "Backpack" ? 1 : 2, tokenInstance.address, taskArguments.amount);
-    }
+      value: nativeFee
+    });
+  });
+
+
+  /**
+   * Get the balance of the specified account on the specified chain
+   * 
+   * npx hardhat balance --network localhost --chain "ethereum" 
+   * npx hardhat balance --network localhost --chain "polygon" 
+   * 
+   * npx hardhat balance --network ethereumSepolia --chain "ethereum" 
+   * npx hardhat balance --network polygonMumbai --chain "polygon" 
+   * 
+   * npx hardhat balance --network ethereumMainnet --chain "ethereum" 
+   * npx hardhat balance --network polygonMainnet --chain "polygon" 
+   */
+  task("balance", "Get the balance of the specified account")
+  .addParam("chain", "The chain to get the balance on")
+  .addOptionalParam("account", "The account to get the balance for")
+  .setAction(async (taskArguments, hre) =>
+  {
+    // Config
+    const isDevEnvironment = hre.network.name == "hardhat" 
+        || hre.network.name == "ganache" 
+        || hre.network.name == "localhost";
+
+    const appConfig = await loadConfigAsync(taskArguments.chain);
+    const config = appConfig.networks[
+        isDevEnvironment ? "development" : hre.network.name];
+    const deploymentManger = new DeploymentManager(hre.network.name);
+
+    const tokenAddress = deploymentManger.getContractDeployment(
+      config.layerZero.token).address;
+    const tokenInstance = await hre.ethers.getContractAt("ERC20", tokenAddress);
+
+    const account = taskArguments.account ? taskArguments.account : 
+        (await hre.ethers.getSigners())[0].address;
+
+    const balance = await tokenInstance.balanceOf(account);
+    const balanceFormatted = hre.ethers.utils.formatUnits(balance, 'ether');
+
+    console.log(`The balance of ${chalk.cyan(account)} on ${chalk.yellow(hre.network.name)} is ${chalk.bold(balanceFormatted)}`);
   });

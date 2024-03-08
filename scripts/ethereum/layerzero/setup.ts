@@ -68,12 +68,12 @@ async function main() {
     //////////////////////////////////
     /////// Ensure Peers Set /////////
     //////////////////////////////////
-    for (let peer of config.layerZero.peers)
+    for (let peer of Object.values(config.layerZero.peers))
     {
-        await ensurePeerSet(peer.network, peer.endpointId, peer.deploymentKey);
+        await ensurePeerSet(peer.network, peer.endpointId, peer.token);
     }
 
-    console.log(`\Ensured ${chalk.bold(config.layerZero.peers.length.toString())} peers were confiured on ${chalk.yellow(hre.network.name)}!\n\n`);
+    console.log(`\Ensured ${chalk.bold(Object.keys(config.layerZero.peers).length.toString())} peers were confiured on ${chalk.yellow(hre.network.name)}!\n\n`);
 }
 
 /**

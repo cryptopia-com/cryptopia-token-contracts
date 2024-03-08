@@ -7,6 +7,7 @@ const config : AppConfig = {
                 depositor: "0xb5505a6d998549090530911180f38aC5130101c6"
             },
             layerZero: {
+                token: "CryptosTokenPolygon",
                 endpoint: {
                     endpointId: 2,
                     endpointLocation: "MockLayerZeroEndpoint",
@@ -21,7 +22,7 @@ const config : AppConfig = {
                     ethereum: {
                         network: "localhost",
                         endpointId: 1,
-                        deploymentKey: "CryptosTokenOFTAdapter"
+                        token: "CryptosTokenOFTAdapter"
                     }
                 }
             }
@@ -31,6 +32,7 @@ const config : AppConfig = {
                 depositor: "0xb5505a6d998549090530911180f38aC5130101c6"
             },
             layerZero: {
+                token: "CryptosTokenPolygon",
                 endpoint: {
                     endpointId: 40109,
                     endpointLocation: "0x6edce65403992e310a62460808c4b910d972f10f"
@@ -39,7 +41,7 @@ const config : AppConfig = {
                     ethereum: {
                         network: "ethereumSepolia",
                         endpointId: 40161,
-                        deploymentKey: "CryptosTokenOFTAdapter"
+                        token: "CryptosTokenOFTAdapter"
                     }
                 }
             }
@@ -50,6 +52,7 @@ const config : AppConfig = {
                 depositor: "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa"
             },
             layerZero: {
+                token: "CryptosTokenPolygon",
                 endpoint: {
                     endpointId: 30109,
                     endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c"
@@ -58,7 +61,7 @@ const config : AppConfig = {
                     ethereum: {
                         network: "ethereumMainnet",
                         endpointId: 30101,
-                        deploymentKey: "CryptosTokenOFTAdapter"
+                        token: "CryptosTokenOFTAdapter"
                     }
                 }
             }

@@ -55,7 +55,7 @@ async function main() {
         config.layerZero.endpoint.endpointDestinations && 
         config.layerZero.endpoint.endpointDestinations?.length > 0)
     {
-        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpoint:Ethereum").address;
+        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpoint:Polygon").address;
         mockEndpointInstance = await ethers.getContractAt("MockLayerZeroEndpoint", mockEndpointAddress);
 
         for (let destination of config.layerZero.endpoint.endpointDestinations)
@@ -68,12 +68,12 @@ async function main() {
     //////////////////////////////////
     /////// Ensure Peers Set /////////
     //////////////////////////////////
-    for (let peer of config.layerZero.peers)
+    for (let peer of Object.values(config.layerZero.peers))
     {
-        await ensurePeerSet(peer.network, peer.endpointId, peer.deploymentKey);
+        await ensurePeerSet(peer.network, peer.endpointId, peer.token);
     }
 
-    console.log(`\Ensured ${chalk.bold(config.layerZero.peers.length.toString())} peers were confiured on ${chalk.yellow(hre.network.name)}!\n\n`);
+    console.log(`\Ensured ${chalk.bold(Object.keys(config.layerZero.peers).length.toString())} peers were confiured on ${chalk.yellow(hre.network.name)}!\n\n`);
 }
 
 /**

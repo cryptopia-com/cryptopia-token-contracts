@@ -24,9 +24,16 @@ abstract contract CryptopiaTokenRetriever {
     /** 
      * Admin functions
      */
+    /// @dev Failsafe mechanism (required to be implemented by derived contracts)
+    /// @notice Allows the owner to retrieve tokens from the contract that 
+    ///         might have been send there by accident
+    /// @param _tokenContract The address of ERC20 compatible token
+    function retrieveTokens(address _tokenContract) external virtual;
+
+
     /// @dev Failsafe mechanism
-    /// Allows the owner to retrieve tokens from the contract that 
-    /// might have been send there by accident
+    /// @notice Allows the owner to retrieve tokens from the contract that 
+    ///         might have been send there by accident
     /// @param _tokenContract The address of ERC20 compatible token
     function _retrieveTokens(address _tokenContract) 
         internal   

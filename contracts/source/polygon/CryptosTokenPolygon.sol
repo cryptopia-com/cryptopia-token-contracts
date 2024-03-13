@@ -10,7 +10,7 @@ import "../infrastructure/CryptopiaTokenRetriever.sol";
 
 /// @title Cryptopia Token for Polygon
 /// @notice Game currency used in Cryptopia
-/// @dev Implements the ERC20 standard
+/// @dev Implements the ERC20 and the Omnichain Fungible Token (OFT) standards
 /// @author Frank Bonnet - <frankbonnet@outlook.com>
 contract CryptosTokenPolygon is OFT, CryptopiaTokenRetriever {
 
@@ -102,11 +102,11 @@ contract CryptosTokenPolygon is OFT, CryptopiaTokenRetriever {
 
 
     /// @dev Failsafe mechanism
-    /// Allows the owner to retrieve tokens from the contract that 
-    /// might have been send there by accident
+    /// @notice Allows the owner to retrieve tokens from the contract  
+    ///         that might have been send there by accident
     /// @param _tokenContract The address of ERC20 compatible token
     function retrieveTokens(address _tokenContract) 
-        external onlyOwner()
+        external override onlyOwner()
     {
         _retrieveTokens(_tokenContract);
     }

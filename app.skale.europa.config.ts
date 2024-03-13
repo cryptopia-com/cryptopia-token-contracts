@@ -4,7 +4,7 @@ const config : AppConfig = {
     networks: {
         development: {
             layerZero: {
-                token: "CryptosTokenSkale",
+                token: "CryptosTokenSkaleEuropa",
                 endpoint: {
                     endpointId: 3,
                     endpointLocation: "MockLayerZeroEndpoint",
@@ -35,7 +35,7 @@ const config : AppConfig = {
         },
         skaleEuropaTestnet: {
             layerZero: {
-                token: "CryptosTokenSkale",
+                token: "CryptosTokenSkaleEuropa",
                 endpoint: {
                     endpointId: 40254,
                     endpointLocation: "0x6EDCE65403992e310A62460808c4b910D972f10f"

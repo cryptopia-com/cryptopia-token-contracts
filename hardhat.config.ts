@@ -212,6 +212,11 @@ task("bridge", "Transfer tokens between blockchains")
         || hre.network.name == "ganache" 
         || hre.network.name == "localhost";
 
+    if (taskArguments.origin == "skale")
+    {
+        taskArguments.origin = "skale.europa";
+    }
+
     const appConfig = await loadConfigAsync(taskArguments.origin);
     const config = appConfig.networks[
         isDevEnvironment ? "development" : hre.network.name];
@@ -291,6 +296,11 @@ task("bridge", "Transfer tokens between blockchains")
     const isDevEnvironment = hre.network.name == "hardhat" 
         || hre.network.name == "ganache" 
         || hre.network.name == "localhost";
+
+    if (taskArguments.chain == "skale")
+    {
+        taskArguments.chain = "skale.europa";
+    }
 
     const appConfig = await loadConfigAsync(taskArguments.chain);
     const config = appConfig.networks[

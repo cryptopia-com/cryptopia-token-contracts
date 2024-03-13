@@ -4,26 +4,25 @@ import { ethers } from "hardhat";
 
 import { 
     MockToken,
-    CryptosTokenPolygon
+    CryptosTokenSkaleEuropa
 } from "../typechain-types";
 
 /**
- * CryptosToken on Polygon (child)
+ * CryptosToken on Skale Europa (child)
  */
-describe("Polygon", function () {
+describe("Skale Europa", function () {
 
     // Accounts
     let deployer: string;
-    let polygonBridgeDepositor: string;
     let receiver: string;
     let withdrawer: string;
     let other: string;
 
     // Instances
-    let cryptosTokenInstance: CryptosTokenPolygon;
+    let cryptosTokenInstance: CryptosTokenSkaleEuropa;
 
     // Settings
-    const eidPolygon = 30109;
+    const eidSkale = 40254;
 
     /**
      * Deploy Token Contract
@@ -31,20 +30,20 @@ describe("Polygon", function () {
     before(async () => {
 
         // Accounts
-        [deployer, polygonBridgeDepositor, receiver, withdrawer, other] = (
+        [deployer, receiver, withdrawer, other] = (
             await ethers.getSigners()).map(s => s.address);
 
         // Factories
-        const CryptosTokenFactory = await ethers.getContractFactory("CryptosTokenPolygon");
+        const CryptosTokenFactory = await ethers.getContractFactory("DevelopmentTokenSkaleEuropa");
         const LayerZeroEndpointFactory = await ethers.getContractFactory("MockLayerZeroEndpoint");
         
         // Deploy endpoint
-        const layerZeroEndpointInstance = await LayerZeroEndpointFactory.deploy(eidPolygon);
+        const layerZeroEndpointInstance = await LayerZeroEndpointFactory.deploy(eidSkale);
         const layerZeroEndpointAddress = await layerZeroEndpointInstance.address;
 
         // Deploy token
         cryptosTokenInstance = await CryptosTokenFactory.deploy(
-            polygonBridgeDepositor, layerZeroEndpointAddress, deployer);
+            layerZeroEndpointAddress, deployer);
     });
 
     /**
@@ -79,161 +78,123 @@ describe("Polygon", function () {
      */
     describe("Bridge", function () {
 
-        it ("Polygon bridge is set as depositor", async () => {
+        // Settings
+        const bridge = "0xD2aAA00500000000000000000000000000000000";
+
+        it("Bridge should have the MINTER_ROLE", async () => {
 
             // Setup
-            const expected = polygonBridgeDepositor;
+            const role = ethers.utils.keccak256(
+                ethers.utils.toUtf8Bytes("MINTER_ROLE"));
 
             // Act
-            const actual = await cryptosTokenInstance.polygonBridgeDepositor();
+            const hasRole = await cryptosTokenInstance.hasRole(role, bridge);
 
             // Assert
-            expect(actual).to.equal(expected);
+            expect(hasRole).to.equal(true);
         });
 
-        it ("Non-depositor cannot deposit", async () => {
+        it("Bridge should have the BURNER_ROLE", async () => {
 
             // Setup
-            const amount = ethers.utils.parseEther("100");
-            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
-            const otherSigner = ethers.provider.getSigner(other);
+            const role = ethers.utils.keccak256(
+                ethers.utils.toUtf8Bytes("BURNER_ROLE"));
 
             // Act
-            const operation = cryptosTokenInstance
-                .connect(otherSigner)
-                .deposit(receiver, amountEncoded);
-            
+            const hasRole = await cryptosTokenInstance.hasRole(role, bridge);
+
             // Assert
-            await expect(operation).to.be
-                .revertedWithCustomError(cryptosTokenInstance, "Unauthorized");
+            expect(hasRole).to.equal(true);
         });
 
-        it ("Cannot deposit to null address", async () => {
+        it ("Non-Bridge should not be able to mint", async () => {
                 
             // Setup
             const amount = ethers.utils.parseEther("100");
-            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
-            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
+            const nonBridgeSigner = ethers.provider.getSigner(other);
 
             // Act
             const operation = cryptosTokenInstance
-                .connect(depositorSigner)
-                .deposit(ethers.constants.AddressZero, amountEncoded);
-            
+                .connect(nonBridgeSigner)
+                .mint(other, amount);
+
             // Assert
             await expect(operation).to.be
-                .revertedWithCustomError(cryptosTokenInstance, "ArgumentZeroAddress");
-         });
+                .revertedWithCustomError(cryptosTokenInstance, "AccessControlUnauthorizedAccount")
+                .withArgs(other, "MINTER_ROLE".toKeccak256());
+        });
 
-        it ("Polyong bridge (depositor) can deposit", async () => {
+        it ("Bridge should be able to mint", async () => {
+                
+            // Setup
+            const amount = ethers.utils.parseEther("100");
+            const balanceBefore = await cryptosTokenInstance.balanceOf(deployer);
+
+            // Act
+            await cryptosTokenInstance.mint(deployer, amount);
+
+            // Assert
+            const balanceAfter = await cryptosTokenInstance.balanceOf(deployer);
+            expect(balanceAfter).to.equal(balanceBefore.add(amount));
+        });
+
+        it ("Minting should emit Mint event", async () => {
 
             // Setup
             const amount = ethers.utils.parseEther("100");
-            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
-            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             // Act
-            await cryptosTokenInstance
-                .connect(depositorSigner)
-                .deposit(receiver, amountEncoded);
+            const operation = cryptosTokenInstance.mint(deployer, amount);
 
             // Assert
-            const receiverBalance = await cryptosTokenInstance.balanceOf(receiver);
-            expect(receiverBalance).to.equal(amount);
+            await expect(operation).to
+                .emit(cryptosTokenInstance, "Mint")
+                .withArgs(deployer, amount);
         });
 
-        it ("Should emit Deposit event", async () => {
+        it ("Non-Bridge should not be able to burn", async () => {
+                
+            // Setup
+            const amount = ethers.utils.parseEther("100");
+            const nonBridgeSigner = ethers.provider.getSigner(other);
+
+            // Act
+            const operation = cryptosTokenInstance
+                .connect(nonBridgeSigner)
+                .burn(amount);
+
+            // Assert
+            await expect(operation).to.be
+                .revertedWithCustomError(cryptosTokenInstance, "AccessControlUnauthorizedAccount")
+                .withArgs(other, "BURNER_ROLE".toKeccak256());
+        });
+
+        it ("Bridge should be able to burn", async () => {
+                
+            // Setup
+            const amount = ethers.utils.parseEther("100");
+            const balanceBefore = await cryptosTokenInstance.balanceOf(deployer);
+
+            // Act
+            await cryptosTokenInstance.burn(amount);
+
+            // Assert
+            const balanceAfter = await cryptosTokenInstance.balanceOf(deployer);
+            expect(balanceAfter).to.equal(balanceBefore.sub(amount));
+        });
+
+        it ("Burning should emit Burn event", async () => {
 
             // Setup
             const amount = ethers.utils.parseEther("100");
-            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [amount]);
-            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
 
             // Act
-            const operation = cryptosTokenInstance
-                .connect(depositorSigner)
-                .deposit(receiver, amountEncoded);
+            const operation = cryptosTokenInstance.burn(amount);
 
             // Assert
             await expect(operation).to
-                .emit(cryptosTokenInstance, "Deposit")
-                .withArgs(receiver, amount);
-        });
-    });
-
-    /**
-     * Test withdraw
-     */
-    describe("Withdraw", function () {
-
-        // Setup
-        const depositAmount = ethers.utils.parseEther("200");
-
-        /**
-         * Deposit tokens
-         */
-        before(async () => {
-            const amountEncoded = ethers.utils.defaultAbiCoder.encode(["uint256"], [depositAmount]);
-            const depositorSigner = ethers.provider.getSigner(polygonBridgeDepositor);
-
-            await cryptosTokenInstance
-                .connect(depositorSigner)
-                .deposit(withdrawer, amountEncoded);
-        });
-
-        it ("Should not withdraw more tokens than deposited", async () => {
-
-            // Setup
-            const withdrawAmount = depositAmount.add(1);
-            const withdrawerSigner = ethers.provider.getSigner(withdrawer);
-
-            // Act
-            const operation = cryptosTokenInstance
-                .connect(withdrawerSigner)
-                .withdraw(withdrawAmount);
-            
-            // Assert
-            await expect(operation).to.be
-                .revertedWithCustomError(cryptosTokenInstance, "ERC20InsufficientBalance");
-        });
-
-        it ("Should withdraw deposited tokens", async () => {
-
-            // Setup
-            const withdrawAmount = ethers.utils.parseEther("100");;
-            const withdrawerSigner = ethers.provider.getSigner(withdrawer);
-
-            const totalSupplyBefore = await cryptosTokenInstance.totalSupply();
-            const withdrawerBalanceBefore = await cryptosTokenInstance.balanceOf(withdrawer);
-
-            // Act
-            await cryptosTokenInstance
-                .connect(withdrawerSigner)
-                .withdraw(withdrawAmount);
-
-            const totalSupplyAfter = await cryptosTokenInstance.totalSupply();
-            const withdrawerBalanceAfter = await cryptosTokenInstance.balanceOf(withdrawer);
-
-            // Assert
-            expect(totalSupplyAfter).to.equal(totalSupplyBefore.sub(withdrawAmount));
-            expect(withdrawerBalanceAfter).to.equal(withdrawerBalanceBefore.sub(withdrawAmount));
-        });
-
-        it ("Should emit Withdraw event", async () => {
-
-            // Setup
-            const withdrawAmount = ethers.utils.parseEther("100");
-            const withdrawerSigner = ethers.provider.getSigner(withdrawer);
-
-            // Act
-            const operation = cryptosTokenInstance
-                .connect(withdrawerSigner)
-                .withdraw(withdrawAmount);
-
-            // Assert
-            await expect(operation).to
-                .emit(cryptosTokenInstance, "Withdraw")
-                .withArgs(withdrawer, withdrawAmount);
+                .emit(cryptosTokenInstance, "Burn")
+                .withArgs(deployer, amount);
         });
     });
 

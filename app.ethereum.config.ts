@@ -15,7 +15,7 @@ const config : AppConfig = {
                             destinationEndpoint: "MockLayerZeroEndpoint:Polygon"
                         },
                         {
-                            destinationToken: "CryptosTokenSkale",
+                            destinationToken: "CryptosTokenSkaleEuropa",
                             destinationEndpoint: "MockLayerZeroEndpoint:Skale"
                         }
                     ]
@@ -29,7 +29,7 @@ const config : AppConfig = {
                     skale: {
                         network: "localhost",
                         endpointId: 3,
-                        token: "CryptosTokenSkale"
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 }
             }
@@ -55,7 +55,7 @@ const config : AppConfig = {
                     skale: {
                         network: "skaleEuropaTestnet",
                         endpointId: 40254,
-                        token: "CryptosTokenSkale"
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 }
             }

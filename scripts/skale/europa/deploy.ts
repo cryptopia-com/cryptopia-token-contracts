@@ -1,11 +1,11 @@
 import ora from 'ora-classic';
 import chalk from 'chalk';
 import hre, { ethers } from "hardhat"; 
-import appConfig, { NetworkConfig } from "../../app.skale.config";
+import appConfig, { NetworkConfig } from "../../../app.skale.europa.config";
 import { Contract } from "ethers";
-import { DeploymentManager } from "../helpers/deployments";
-import { waitForMinimumTime } from "../helpers/timers";
-import { waitForTransaction } from "../helpers/transactions";
+import { DeploymentManager } from "../../helpers/deployments";
+import { waitForMinimumTime } from "../../helpers/timers";
+import { waitForTransaction } from "../../helpers/transactions";
 
 // Settins
 const MIN_TIME = 100;
@@ -29,8 +29,8 @@ let deploymentManager: DeploymentManager;
 /**
  * Deploy contracts
  * 
- * npx hardhat run --network localhost ./scripts/skale/deploy.ts
- * npx hardhat run --network skaleEuropa ./scripts/skale/deploy.ts
+ * npx hardhat run --network localhost ./scripts/skale/europa/deploy.ts
+ * npx hardhat run --network skaleEuropaTestnet ./scripts/skale/europa/deploy.ts
  */
 async function main() {
 
@@ -71,7 +71,7 @@ async function main() {
     ////// Deploy Cryptos Token //////
     //////////////////////////////////
     await ensureDeployed(
-        "CryptosTokenSkale", 
+        "CryptosTokenSkaleEuropa", 
         [
             lzEndpointAddress,
             deployer.address

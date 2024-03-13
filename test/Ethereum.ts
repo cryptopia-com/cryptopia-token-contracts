@@ -29,7 +29,7 @@ describe("Ethereum", function () {
         // Factories
         const CryptosTokenFactory = await ethers.getContractFactory("CryptosToken");
         
-        // Deploy Inventories
+        // Deploy Token
         cryptosTokenInstance = await CryptosTokenFactory.deploy(deployer);
     });
 

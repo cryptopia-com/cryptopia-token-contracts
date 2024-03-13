@@ -1,28 +1,28 @@
 import ora from 'ora-classic';
 import chalk from 'chalk';
 import hre, { ethers } from "hardhat"; 
-import appConfig, { NetworkConfig } from "../../../app.skale.config";
-import { DeploymentManager } from "../../helpers/deployments";
-import { waitForMinimumTime } from "../../helpers/timers";
+import appConfig, { NetworkConfig } from "../../../../app.skale.europa.config";
+import { DeploymentManager } from "../../../helpers/deployments";
+import { waitForMinimumTime } from "../../../helpers/timers";
 
 import { 
     MockLayerZeroEndpoint,
-    CryptosTokenSkale,
-} from "../../../typechain-types";
+    CryptosTokenSkaleEuropa,
+} from "../../../../typechain-types";
 
 // Settins
 const MIN_TIME = 100;
 
 let config: NetworkConfig;
 let deploymentManager: DeploymentManager;
-let tokenInstance: CryptosTokenSkale;
+let tokenInstance: CryptosTokenSkaleEuropa;
 let mockEndpointInstance: MockLayerZeroEndpoint;
 
 /**
  * Setup peers and endpoints
  * 
- * npx hardhat run --network localhost ./scripts/skale/layerzero/setup.ts
- * npx hardhat run --network skaleEuropa ./scripts/skale/layerzero/setup.ts
+ * npx hardhat run --network localhost ./scripts/skale/europa/layerzero/setup.ts
+ * npx hardhat run --network skaleEuropa ./scripts/skale/europa/layerzero/setup.ts
  */
 async function main() {
 
@@ -38,8 +38,8 @@ async function main() {
 
     console.log(`\n\nStarting LayerZero setup on ${chalk.yellow(hre.network.name)}..`);
 
-    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenSkale").address;
-    tokenInstance = await ethers.getContractAt("CryptosTokenSkale", tokenAddress);
+    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenSkaleEuropa").address;
+    tokenInstance = await ethers.getContractAt("CryptosTokenSkaleEuropa", tokenAddress);
 
     const owner = await tokenInstance.owner();
     if (owner != deployer.address)

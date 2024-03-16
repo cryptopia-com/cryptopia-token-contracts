@@ -4,8 +4,9 @@ pragma solidity 0.8.22;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-/// @title Cryptopia ERC20 
-/// @notice Token that extends Openzeppelin ERC20Upgradeable
+/// @title Cryptopia Token Retriever 
+/// @notice Retrieve tokens accidentally sent to the contract. This feature 
+///         is a critical safeguard to prevent the permanent loss of tokens
 /// @dev Implements the ERC20 standard
 /// @author Frank Bonnet - <frankbonnet@outlook.com>
 abstract contract CryptopiaTokenRetriever {
@@ -24,9 +25,16 @@ abstract contract CryptopiaTokenRetriever {
     /** 
      * Admin functions
      */
+    /// @dev Failsafe mechanism 
+    /// @notice Requires the implementing contract to call `_retrieveTokens` 
+    ///         with the address of the ERC20 compatible token to retrieve
+    /// @param _tokenContract The address of ERC20 compatible token
+    function retrieveTokens(address _tokenContract) virtual external;
+
+
     /// @dev Failsafe mechanism
-    /// Allows the owner to retrieve tokens from the contract that 
-    /// might have been send there by accident
+    /// @notice Allows the owner to retrieve tokens from the contract  
+    ///         that might have been sent there by accident
     /// @param _tokenContract The address of ERC20 compatible token
     function _retrieveTokens(address _tokenContract) 
         internal   

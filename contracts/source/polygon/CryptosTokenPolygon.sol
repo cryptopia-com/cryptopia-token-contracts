@@ -105,10 +105,10 @@ contract CryptosTokenPolygon is OFT, CryptopiaTokenRetriever {
 
     /// @dev Failsafe mechanism
     /// Allows the owner to retrieve tokens from the contract that 
-    /// might have been send there by accident
+    /// might have been sent there by accident
     /// @param _tokenContract The address of ERC20 compatible token
     function retrieveTokens(address _tokenContract) 
-        external onlyOwner()
+        external override onlyOwner()
     {
         _retrieveTokens(_tokenContract);
     }

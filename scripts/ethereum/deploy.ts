@@ -47,20 +47,7 @@ async function main() {
 
     console.log(`\n\nStarting deployment to ${chalk.yellow(hre.network.name)} from ${chalk.blue(deployer.address)}..`);
 
-    //////////////////////////////////
-    ////// Deploy Cryptos Token //////
-    //////////////////////////////////
-    const [cryptosTokenContract] = await ensureDeployed(
-        "CryptosToken", 
-        [
-            config.owner 
-                ? config.owner 
-                : deployer.address,
-        ]);
-
-    const cryptosTokenAddress = await cryptosTokenContract.address;
-
-
+    
     //////////////////////////////////
     ////// Ensure LZ Endpoint ////////
     //////////////////////////////////
@@ -83,12 +70,11 @@ async function main() {
 
 
     //////////////////////////////////
-    /////// Deploy OFT Adapter ///////
+    ////// Deploy Cryptos Token //////
     //////////////////////////////////
     await ensureDeployed(
-        "CryptosTokenOFTAdapter", 
+        "CryptosToken", 
         [
-            cryptosTokenAddress,
             lzEndpointAddress,
             deployer.address
         ]);

@@ -6,8 +6,8 @@ import { DeploymentManager } from "../../helpers/deployments";
 import { waitForMinimumTime } from "../../helpers/timers";
 
 import { 
-    MockLayerZeroEndpoint,
-    CryptosTokenOFTAdapter,
+    CryptosToken,
+    MockLayerZeroEndpoint
 } from "../../../typechain-types";
 
 // Settins
@@ -15,7 +15,7 @@ const MIN_TIME = 100;
 
 let config: NetworkConfig;
 let deploymentManager: DeploymentManager;
-let tokenInstance: CryptosTokenOFTAdapter;
+let tokenInstance: CryptosToken;
 let mockEndpointInstance: MockLayerZeroEndpoint;
 
 /**
@@ -39,8 +39,8 @@ async function main() {
 
     console.log(`\n\nStarting LayerZero setup on ${chalk.yellow(hre.network.name)}..`);
 
-    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenOFTAdapter").address;
-    tokenInstance = await ethers.getContractAt("CryptosTokenOFTAdapter", tokenAddress);
+    const tokenAddress = deploymentManager.getContractDeployment("CryptosToken").address;
+    tokenInstance = await ethers.getContractAt("CryptosToken", tokenAddress);
 
     const owner = await tokenInstance.owner();
     if (owner != deployer.address)

@@ -3,9 +3,6 @@ import { LayerZeroConfig } from './scripts/types/LayerZeroConfig';
 const config : AppConfig = {
     networks: {
         development: {
-            bridge: {
-                depositor: "0xb5505a6d998549090530911180f38aC5130101c6"
-            },
             layerZero: {
                 token: "CryptosTokenPolygon",
                 endpoint: {
@@ -13,7 +10,7 @@ const config : AppConfig = {
                     endpointLocation: "MockLayerZeroEndpoint",
                     endpointDestinations: [
                         {
-                            destinationToken: "CryptosTokenOFTAdapter",
+                            destinationToken: "CryptosToken",
                             destinationEndpoint: "MockLayerZeroEndpoint:Ethereum"
                         }
                     ]
@@ -22,15 +19,12 @@ const config : AppConfig = {
                     ethereum: {
                         network: "localhost",
                         endpointId: 1,
-                        token: "CryptosTokenOFTAdapter"
+                        token: "CryptosToken"
                     }
                 }
             }
         },
         polygonMumbai: {
-            bridge: {
-                depositor: "0xb5505a6d998549090530911180f38aC5130101c6"
-            },
             layerZero: {
                 token: "CryptosTokenPolygon",
                 endpoint: {
@@ -41,16 +35,13 @@ const config : AppConfig = {
                     ethereum: {
                         network: "ethereumSepolia",
                         endpointId: 40161,
-                        token: "CryptosTokenOFTAdapter"
+                        token: "CryptosToken"
                     }
                 }
             }
         },
         polygonMainnet: {
             owner: "0x0b4bd509B93B21f25E2d7051905E4A7DCa180A72",
-            bridge: {
-                depositor: "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa"
-            },
             layerZero: {
                 token: "CryptosTokenPolygon",
                 endpoint: {
@@ -61,7 +52,7 @@ const config : AppConfig = {
                     ethereum: {
                         network: "ethereumMainnet",
                         endpointId: 30101,
-                        token: "CryptosTokenOFTAdapter"
+                        token: "CryptosToken"
                     }
                 }
             }
@@ -71,16 +62,11 @@ const config : AppConfig = {
 
 export default config;
 
-export interface PolygonBridgeConfig {
-    depositor: string;
-}
-
 export interface NetworkConfig {
     confirmations?: number;
     pollingInterval?: number;
     pollingTimeout?: number;
     owner?: string;
-    bridge: PolygonBridgeConfig;
     layerZero: LayerZeroConfig;
 }
 

@@ -74,7 +74,6 @@ async function main() {
     await ensureDeployed(
         "CryptosTokenPolygon", 
         [
-            config.bridge.depositor,
             lzEndpointAddress,
             deployer.address
         ]);

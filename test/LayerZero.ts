@@ -1,10 +1,8 @@
-import "../scripts/helpers/converters.ts";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { 
     CryptosToken,
-    CryptosTokenOFTAdapter,
     CryptosTokenPolygon
 } from "../typechain-types";
 
@@ -34,12 +32,10 @@ describe("LayerZero", function () {
 
         // Instances
         let cryptosTokenInstance: CryptosToken;
-        let cryptosTokenOFTAdapterInstance: CryptosTokenOFTAdapter;
         let cryptosTokenPolygonInstance: CryptosTokenPolygon;
 
         // Addresses
         let cryptosTokenAddress: string;
-        let cryptosTokenOFTAdapterAddress: string;
         let cryptosTokenPolygonAddress: string;
 
         // Settings
@@ -59,7 +55,6 @@ describe("LayerZero", function () {
 
             // Factories
             const CryptosTokenFactory = await ethers.getContractFactory("CryptosToken");
-            const CryptosTokenOFTAdapterFactory = await ethers.getContractFactory("CryptosTokenOFTAdapter");
             const CryptosTokenPolygonFactory = await ethers.getContractFactory("CryptosTokenPolygon");
             const LayerZeroEndpointFactory = await ethers.getContractFactory("MockLayerZeroEndpoint");
             
@@ -71,66 +66,23 @@ describe("LayerZero", function () {
             const layerZeroEndpointPolygonAddress = await layerZeroEndpointPolygonInstance.address;
 
             // Deploy tokens
-            cryptosTokenInstance = await CryptosTokenFactory.deploy(deployer);
+            cryptosTokenInstance = await CryptosTokenFactory.deploy(
+                layerZeroEndpointEthereumAddress, deployer);
             cryptosTokenAddress = await cryptosTokenInstance.address;
 
-            cryptosTokenOFTAdapterInstance = await CryptosTokenOFTAdapterFactory.deploy(
-                cryptosTokenAddress, layerZeroEndpointEthereumAddress, deployer);
-            cryptosTokenOFTAdapterAddress = await cryptosTokenOFTAdapterInstance.address;
-
             cryptosTokenPolygonInstance = await CryptosTokenPolygonFactory.deploy(
-                polygonBridgeDepositor, layerZeroEndpointPolygonAddress, deployer);
+                layerZeroEndpointPolygonAddress, deployer);
             cryptosTokenPolygonAddress = await cryptosTokenPolygonInstance.address;
 
             // Setup endpoints
             await layerZeroEndpointEthereumInstance.setDestLzEndpoint(cryptosTokenPolygonAddress, layerZeroEndpointPolygonAddress);
-            await layerZeroEndpointPolygonInstance.setDestLzEndpoint(cryptosTokenOFTAdapterAddress, layerZeroEndpointEthereumAddress);
+            await layerZeroEndpointPolygonInstance.setDestLzEndpoint(cryptosTokenAddress, layerZeroEndpointEthereumAddress);
 
-            await cryptosTokenOFTAdapterInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
-            await cryptosTokenPolygonInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenOFTAdapterAddress, 32));
+            await cryptosTokenInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
+            await cryptosTokenPolygonInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenAddress, 32));
 
             // Fund user account
             await cryptosTokenInstance.transfer(user, initialUserBalance);
-        });
-
-        it ("Should not transfer without approval", async () => {
-
-            // Setup
-            const signer = await ethers.getSigner(user);
-            const amountToTransfer = "60".toWei();
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
-                .toHex()
-                .toString();
-
-            const sendParam: SendParamStruct = {
-                dstEid: eidPolygon,
-                to: ethers.utils.zeroPad(user, 32),
-                amountLD: amountToTransfer,
-                minAmountLD: amountToTransfer,
-                extraOptions: extraOptions,
-                composeMsg: `0x`,
-                oftCmd: `0x`
-            };
-
-            const [nativeFee] = await cryptosTokenOFTAdapterInstance
-                .quoteSend(sendParam, false);
-            const messagingFee: MessagingFeeStruct = {
-                nativeFee: nativeFee,
-                lzTokenFee: 0
-            };
-
-            const operation = cryptosTokenOFTAdapterInstance
-                .connect(signer)
-                .send(sendParam, messagingFee, user, 
-                {
-                    value: nativeFee
-                });
-
-            // Assert
-            expect(operation).to.be
-                .revertedWithCustomError(cryptosTokenInstance, "ERC20InsufficientAllowance")
-                .withArgs(user, 0, amountToTransfer);
         });
 
         it ("Should transfer to Polygon", async () => {
@@ -153,15 +105,15 @@ describe("LayerZero", function () {
                 oftCmd: `0x`
             };
 
-            const [nativeFee] = await cryptosTokenOFTAdapterInstance
+            const [nativeFee] = await cryptosTokenInstance
                 .quoteSend(sendParam, false);
             const messagingFee: MessagingFeeStruct = {
                 nativeFee: nativeFee,
                 lzTokenFee: 0
             };
 
-            await cryptosTokenInstance.connect(signer).approve(cryptosTokenOFTAdapterAddress, amountToTransfer);
-            await cryptosTokenOFTAdapterInstance.connect(signer).send(sendParam, messagingFee, user, {
+            await cryptosTokenInstance.connect(signer).approve(cryptosTokenAddress, amountToTransfer);
+            await cryptosTokenInstance.connect(signer).send(sendParam, messagingFee, user, {
                 value: nativeFee
             });
 
@@ -181,17 +133,14 @@ describe("LayerZero", function () {
 
         // Accounts
         let deployer: string;
-        let polygonBridgeDepositor: string;
         let user: string;
 
         // Instances
         let cryptosTokenInstance: CryptosToken;
-        let cryptosTokenOFTAdapterInstance: CryptosTokenOFTAdapter;
         let cryptosTokenPolygonInstance: CryptosTokenPolygon;
 
         // Addresses
         let cryptosTokenAddress: string;
-        let cryptosTokenOFTAdapterAddress: string;
         let cryptosTokenPolygonAddress: string;
 
         // Settings
@@ -206,12 +155,11 @@ describe("LayerZero", function () {
         before(async () => {
 
             // Accounts
-            [deployer, polygonBridgeDepositor, user] = (
+            [deployer, user] = (
                 await ethers.getSigners()).map(s => s.address);
 
             // Factories
             const CryptosTokenFactory = await ethers.getContractFactory("CryptosToken");
-            const CryptosTokenOFTAdapterFactory = await ethers.getContractFactory("CryptosTokenOFTAdapter");
             const CryptosTokenPolygonFactory = await ethers.getContractFactory("CryptosTokenPolygon");
             const LayerZeroEndpointFactory = await ethers.getContractFactory("MockLayerZeroEndpoint");
             
@@ -223,23 +171,20 @@ describe("LayerZero", function () {
             const layerZeroEndpointPolygonAddress = await layerZeroEndpointPolygonInstance.address;
 
             // Deploy tokens
-            cryptosTokenInstance = await CryptosTokenFactory.deploy(deployer);
+            cryptosTokenInstance = await CryptosTokenFactory.deploy(
+                layerZeroEndpointEthereumAddress, deployer);
             cryptosTokenAddress = await cryptosTokenInstance.address;
 
-            cryptosTokenOFTAdapterInstance = await CryptosTokenOFTAdapterFactory.deploy(
-                cryptosTokenAddress, layerZeroEndpointEthereumAddress, deployer);
-            cryptosTokenOFTAdapterAddress = await cryptosTokenOFTAdapterInstance.address;
-
             cryptosTokenPolygonInstance = await CryptosTokenPolygonFactory.deploy(
-                polygonBridgeDepositor, layerZeroEndpointPolygonAddress, deployer);
+                layerZeroEndpointPolygonAddress, deployer);
             cryptosTokenPolygonAddress = await cryptosTokenPolygonInstance.address;
 
             // Setup endpoints
             await layerZeroEndpointEthereumInstance.setDestLzEndpoint(cryptosTokenPolygonAddress, layerZeroEndpointPolygonAddress);
-            await layerZeroEndpointPolygonInstance.setDestLzEndpoint(cryptosTokenOFTAdapterAddress, layerZeroEndpointEthereumAddress);
+            await layerZeroEndpointPolygonInstance.setDestLzEndpoint(cryptosTokenAddress, layerZeroEndpointEthereumAddress);
 
-            await cryptosTokenOFTAdapterInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
-            await cryptosTokenPolygonInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenOFTAdapterAddress, 32));
+            await cryptosTokenInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
+            await cryptosTokenPolygonInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenAddress, 32));
 
             // Fund user account
             const extraOptions = Options.newOptions()
@@ -257,15 +202,15 @@ describe("LayerZero", function () {
                 oftCmd: `0x`
             };
 
-            const [nativeFee] = await cryptosTokenOFTAdapterInstance
+            const [nativeFee] = await cryptosTokenInstance
                 .quoteSend(sendParam, false);
             const messagingFee: MessagingFeeStruct = {
                 nativeFee: nativeFee,
                 lzTokenFee: 0
             };
 
-            await cryptosTokenInstance.approve(cryptosTokenOFTAdapterAddress, initialUserBalance);
-            await cryptosTokenOFTAdapterInstance.send(sendParam, messagingFee, user, {
+            await cryptosTokenInstance.approve(cryptosTokenAddress, initialUserBalance);
+            await cryptosTokenInstance.send(sendParam, messagingFee, user, {
                 value: nativeFee
             });
         });

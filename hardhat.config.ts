@@ -53,7 +53,7 @@ const config: HardhatUserConfig = {
       }
     },
     polygonMainnet: {
-      url: "https://go.getblock.io/a338e4262f064158b2f436186ba26f52",
+      url: "https://go.getblock.io/8e9b429a2cc7420b8f68297565f5ab82",
       chainId: 137,
       accounts: {
         mnemonic: secret.polygonMainnet.mnemonic,
@@ -74,7 +74,9 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
+      mainnet: secret.ethereumMainnet.etherscan,
       sepolia: secret.ethereumSepolia.etherscan,
+      polygon: secret.polygonMainnet.etherscan,
       polygonAmoy: secret.polygonAmoy.etherscan,
     }
   }

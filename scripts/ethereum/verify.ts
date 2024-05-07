@@ -28,6 +28,7 @@ async function main() {
             await hre.run("verify:verify", {
                 address: deployment.address,
                 constructorArguments: deployment.constructorArguments,
+                contract: "contracts/source/ethereum/CryptosToken.sol:CryptosToken"
             });
 
             ora(`Successfully verified`).succeed();

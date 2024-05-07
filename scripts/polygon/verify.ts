@@ -28,6 +28,7 @@ async function main() {
             await hre.run("verify:verify", {
                 address: deployment.address,
                 constructorArguments: deployment.constructorArguments,
+                contract: "contracts/source/polygon/CryptosTokenPolygon.sol:CryptosTokenPolygon"
             });
 
             ora(`Successfully verified`).succeed();

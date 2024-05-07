@@ -10,7 +10,7 @@ import {
 import { 
   MessagingFeeStruct, 
   SendParamStruct 
-} from "./typechain-types/contracts/source/ethereum/CryptosTokenOFTAdapter.js";
+} from "./typechain-types/contracts/source/ethereum/CryptosToken.js";
 import { DeploymentManager } from "./scripts/helpers/deployments";
 
 const secret = JSON.parse(

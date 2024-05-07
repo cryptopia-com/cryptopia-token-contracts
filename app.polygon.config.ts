@@ -41,7 +41,6 @@ const config : AppConfig = {
             }
         },
         polygonMainnet: {
-            owner: "0x0b4bd509B93B21f25E2d7051905E4A7DCa180A72",
             layerZero: {
                 token: "CryptosTokenPolygon",
                 endpoint: {
@@ -66,7 +65,6 @@ export interface NetworkConfig {
     confirmations?: number;
     pollingInterval?: number;
     pollingTimeout?: number;
-    owner?: string;
     layerZero: LayerZeroConfig;
 }
 

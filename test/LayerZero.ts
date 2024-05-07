@@ -13,7 +13,7 @@ import {
 import { 
     MessagingFeeStruct, 
     SendParamStruct 
-} from "../typechain-types/contracts/source/ethereum/CryptosTokenOFTAdapter.js";
+} from "../typechain-types/contracts/source/ethereum/CryptosToken.js";
 
 /**
  * Layer Zero

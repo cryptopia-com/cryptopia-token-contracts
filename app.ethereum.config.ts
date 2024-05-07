@@ -28,7 +28,6 @@ const config : AppConfig = {
             confirmations: 1,
             pollingInterval: 1000,
             pollingTimeout: 300000, // 5 minutes
-            owner: "0x333E78ae5D0Cc42586dAcE93a7a9e0a26789Eb4F",
             layerZero: {
                 token: "CryptosToken",
                 endpoint: {
@@ -48,7 +47,6 @@ const config : AppConfig = {
             confirmations: 2,
             pollingInterval: 1000,
             pollingTimeout: 600000, // 10 minutes
-            owner: "0xa25BabD8e575FF990F6dE4326633cd0371534500",
             layerZero: {
                 token: "CryptosToken",
                 endpoint: {
@@ -74,7 +72,6 @@ export interface NetworkConfig {
     confirmations?: number;
     pollingInterval?: number;
     pollingTimeout?: number;
-    owner?: string;
     layerZero: LayerZeroConfig;
 }
 

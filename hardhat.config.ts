@@ -74,6 +74,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
+      sepolia: secret.ethereumSepolia.etherscan,
       polygonAmoy: secret.polygonAmoy.etherscan,
     }
   }

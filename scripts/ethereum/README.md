@@ -11,5 +11,5 @@ npx hardhat run --network ethereumSepolia ./scripts/ethereum/layerzero/setup.ts
 npx hardhat run --network ethereumMainnet ./scripts/ethereum/layerzero/setup.ts
 
 Verify:
-npx hardhat run --network ethereumGoerli ./scripts/ethereum/verify.ts
+npx hardhat run --network ethereumSepolia ./scripts/ethereum/verify.ts
 npx hardhat run --network ethereumMainnet ./scripts/ethereum/verify.ts

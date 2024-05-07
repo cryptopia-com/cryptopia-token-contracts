@@ -8,7 +8,7 @@ const deploymentManager = new DeploymentManager(hre.network.name);
 /**
  * Verify contracts on Etherscan.
  * 
- * npx hardhat run --network polygonMumbai ./scripts/polygon/verify.ts
+ * npx hardhat run --network polygonAmoy ./scripts/polygon/verify.ts
  * npx hardhat run --network polygonMainnet ./scripts/polygon/verify.ts
  */
 async function main() {

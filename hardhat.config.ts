@@ -42,11 +42,11 @@ const config: HardhatUserConfig = {
         count: 10
       }
     },
-    polygonMumbai: {
+    polygonAmoy: {
       url: "https://go.getblock.io/07d076840042416eb75709631abdb21a",
-      chainId: 80001,
+      chainId: 80002,
       accounts: {
-        mnemonic: secret.polygonMumbai.mnemonic,
+        mnemonic: secret.polygonAmoy.mnemonic,
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -74,7 +74,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      polygonMumbai: secret.polygonMumbai.etherscan,
+      polygonAmoy: secret.polygonAmoy.etherscan,
     }
   }
 };
@@ -116,7 +116,7 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
  * npx hardhat bridge --network localhost --origin "polygon" --destination "ethereum" --amount "100"
  * 
  * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount "100"
- * npx hardhat bridge --network polygonMumbai --origin "polygon" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "ethereum" --amount "100"
  * 
  * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "polygon" --amount "100"
  * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "ethereum" --amount "100"
@@ -196,7 +196,7 @@ task("bridge", "Transfer tokens between blockchains")
    * npx hardhat balance --network localhost --chain "polygon" 
    * 
    * npx hardhat balance --network ethereumSepolia --chain "ethereum" 
-   * npx hardhat balance --network polygonMumbai --chain "polygon" 
+   * npx hardhat balance --network polygonAmoy --chain "polygon" 
    * 
    * npx hardhat balance --network ethereumMainnet --chain "ethereum" 
    * npx hardhat balance --network polygonMainnet --chain "polygon" 

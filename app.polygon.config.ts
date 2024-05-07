@@ -24,11 +24,11 @@ const config : AppConfig = {
                 }
             }
         },
-        polygonMumbai: {
+        polygonAmoy: {
             layerZero: {
                 token: "CryptosTokenPolygon",
                 endpoint: {
-                    endpointId: 40109,
+                    endpointId: 40267,
                     endpointLocation: "0x6edce65403992e310a62460808c4b910d972f10f"
                 },
                 peers: {

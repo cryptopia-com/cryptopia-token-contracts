@@ -37,8 +37,8 @@ const config : AppConfig = {
                 },
                 peers: {
                     polygon: {
-                        network: "polygonMumbai",
-                        endpointId: 40109,
+                        network: "polygonAmoy",
+                        endpointId: 40267,
                         token: "CryptosTokenPolygon"
                     }
                 }

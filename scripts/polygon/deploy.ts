@@ -30,7 +30,7 @@ let deploymentManager: DeploymentManager;
  * Deploy contracts
  * 
  * npx hardhat run --network localhost ./scripts/polygon/deploy.ts
- * npx hardhat run --network polygonMumbai ./scripts/polygon/deploy.ts
+ * npx hardhat run --network polygonAmoy ./scripts/polygon/deploy.ts
  * npx hardhat run --network polygonMainnet ./scripts/polygon/deploy.ts
  */
 async function main() {

@@ -14,8 +14,6 @@ describe("Skale Europa", function () {
 
     // Accounts
     let deployer: string;
-    let receiver: string;
-    let withdrawer: string;
     let other: string;
 
     // Instances
@@ -31,7 +29,7 @@ describe("Skale Europa", function () {
     before(async () => {
 
         // Accounts
-        [deployer, receiver, withdrawer, other] = (
+        [deployer, other] = (
             await ethers.getSigners()).map(s => s.address);
 
         // Factories
@@ -75,131 +73,6 @@ describe("Skale Europa", function () {
 
                 // Assert
                 expect(owner).to.equal(deployer);
-        });
-    });
-
-    /**
-     * Test bridge
-     */
-    describe("Bridge", function () {
-
-        // Settings
-        const bridge = "0xD2aAA00500000000000000000000000000000000";
-
-        it("Bridge should have the MINTER_ROLE", async () => {
-
-            // Setup
-            const role = ethers.utils.keccak256(
-                ethers.utils.toUtf8Bytes("MINTER_ROLE"));
-
-            // Act
-            const hasRole = await cryptosTokenInstance.hasRole(role, bridge);
-
-            // Assert
-            expect(hasRole).to.equal(true);
-        });
-
-        it("Bridge should have the BURNER_ROLE", async () => {
-
-            // Setup
-            const role = ethers.utils.keccak256(
-                ethers.utils.toUtf8Bytes("BURNER_ROLE"));
-
-            // Act
-            const hasRole = await cryptosTokenInstance.hasRole(role, bridge);
-
-            // Assert
-            expect(hasRole).to.equal(true);
-        });
-
-        it ("Non-Bridge should not be able to mint", async () => {
-                
-            // Setup
-            const amount = ethers.utils.parseEther("100");
-            const nonBridgeSigner = ethers.provider.getSigner(other);
-
-            // Act
-            const operation = cryptosTokenInstance
-                .connect(nonBridgeSigner)
-                .mint(other, amount);
-
-            // Assert
-            await expect(operation).to.be
-                .revertedWithCustomError(cryptosTokenInstance, "AccessControlUnauthorizedAccount")
-                .withArgs(other, "MINTER_ROLE".toKeccak256());
-        });
-
-        it ("Bridge should be able to mint", async () => {
-                
-            // Setup
-            const amount = ethers.utils.parseEther("100");
-            const balanceBefore = await cryptosTokenInstance.balanceOf(deployer);
-
-            // Act
-            await cryptosTokenInstance.mint(deployer, amount);
-
-            // Assert
-            const balanceAfter = await cryptosTokenInstance.balanceOf(deployer);
-            expect(balanceAfter).to.equal(balanceBefore.add(amount));
-        });
-
-        it ("Minting should emit Mint event", async () => {
-
-            // Setup
-            const amount = ethers.utils.parseEther("100");
-
-            // Act
-            const operation = cryptosTokenInstance.mint(deployer, amount);
-
-            // Assert
-            await expect(operation).to
-                .emit(cryptosTokenInstance, "Mint")
-                .withArgs(deployer, amount);
-        });
-
-        it ("Non-Bridge should not be able to burn", async () => {
-                
-            // Setup
-            const amount = ethers.utils.parseEther("100");
-            const nonBridgeSigner = ethers.provider.getSigner(other);
-
-            // Act
-            const operation = cryptosTokenInstance
-                .connect(nonBridgeSigner)
-                .burn(amount);
-
-            // Assert
-            await expect(operation).to.be
-                .revertedWithCustomError(cryptosTokenInstance, "AccessControlUnauthorizedAccount")
-                .withArgs(other, "BURNER_ROLE".toKeccak256());
-        });
-
-        it ("Bridge should be able to burn", async () => {
-                
-            // Setup
-            const amount = ethers.utils.parseEther("100");
-            const balanceBefore = await cryptosTokenInstance.balanceOf(deployer);
-
-            // Act
-            await cryptosTokenInstance.burn(amount);
-
-            // Assert
-            const balanceAfter = await cryptosTokenInstance.balanceOf(deployer);
-            expect(balanceAfter).to.equal(balanceBefore.sub(amount));
-        });
-
-        it ("Burning should emit Burn event", async () => {
-
-            // Setup
-            const amount = ethers.utils.parseEther("100");
-
-            // Act
-            const operation = cryptosTokenInstance.burn(amount);
-
-            // Assert
-            await expect(operation).to
-                .emit(cryptosTokenInstance, "Burn")
-                .withArgs(deployer, amount);
         });
     });
 

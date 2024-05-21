@@ -6,9 +6,5 @@ import "../../../source/skale/europa/CryptosTokenSkaleEuropa.sol";
 contract DevelopmentTokenSkaleEuropa is CryptosTokenSkaleEuropa {
 
     constructor(address _layerZeroEndpoint, address _owner) 
-        CryptosTokenSkaleEuropa(_layerZeroEndpoint, _owner) 
-    {
-        _grantRole(SKALE_MINTER_ROLE, msg.sender);
-        _grantRole(SKALE_BURNER_ROLE, msg.sender); 
-    }
+        CryptosTokenSkaleEuropa(_layerZeroEndpoint, _owner) {}
 }

@@ -33,6 +33,7 @@ describe("LayerZero", function () {
         let user: string;
 
         // Instances
+        let skaleTokenInstance: MockERC20;
         let cryptosTokenInstance: CryptosToken;
         let cryptosTokenPolygonInstance: CryptosTokenPolygon;
         let cryptosTokenSkaleInstance: CryptosTokenSkaleEuropa;
@@ -59,10 +60,16 @@ describe("LayerZero", function () {
                 await ethers.getSigners()).map(s => s.address);
 
             // Factories
+            const SkaleTokenFactory = await ethers.getContractFactory("MockERC20");
             const CryptosTokenFactory = await ethers.getContractFactory("CryptosToken");
             const CryptosTokenPolygonFactory = await ethers.getContractFactory("CryptosTokenPolygon");
             const CryptosTokenSkaleFactory = await ethers.getContractFactory("CryptosTokenSkaleEuropa");
             const LayerZeroEndpointFactory = await ethers.getContractFactory("MockLayerZeroEndpoint");
+            const LayerZeroEndpointAltFactory = await ethers.getContractFactory("MockLayerZeroEndpointAlt");
+
+            // Deploy tokens
+            skaleTokenInstance = await SkaleTokenFactory.deploy();
+            const skaleTokenAddress = await skaleTokenInstance.address;
             
             // Deploy endpoints
             const layerZeroEndpointEthereumInstance = await LayerZeroEndpointFactory.deploy(eidEthereum);
@@ -71,20 +78,17 @@ describe("LayerZero", function () {
             const layerZeroEndpointPolygonInstance = await LayerZeroEndpointFactory.deploy(eidPolygon);
             const layerZeroEndpointPolygonAddress = await layerZeroEndpointPolygonInstance.address;
 
-            const layerZeroEndpointSkaleInstance = await LayerZeroEndpointFactory.deploy(eidSkale);
+            const layerZeroEndpointSkaleInstance = await LayerZeroEndpointAltFactory.deploy(eidSkale, skaleTokenAddress);
             const layerZeroEndpointSkaleAddress = await layerZeroEndpointSkaleInstance.address;
 
             // Deploy tokens
-            cryptosTokenInstance = await CryptosTokenFactory.deploy(
-                layerZeroEndpointEthereumAddress, deployer);
+            cryptosTokenInstance = await CryptosTokenFactory.deploy(layerZeroEndpointEthereumAddress, deployer);
             cryptosTokenAddress = await cryptosTokenInstance.address;
 
-            cryptosTokenPolygonInstance = await CryptosTokenPolygonFactory.deploy(
-                layerZeroEndpointPolygonAddress, deployer);
+            cryptosTokenPolygonInstance = await CryptosTokenPolygonFactory.deploy(layerZeroEndpointPolygonAddress, deployer);
             cryptosTokenPolygonAddress = await cryptosTokenPolygonInstance.address;
 
-            cryptosTokenSkaleInstance = await CryptosTokenSkaleFactory.deploy(
-                layerZeroEndpointSkaleAddress, deployer);
+            cryptosTokenSkaleInstance = await CryptosTokenSkaleFactory.deploy(layerZeroEndpointSkaleAddress, deployer);
             cryptosTokenSkaleAddress = await cryptosTokenSkaleInstance.address;
 
             // Setup endpoints
@@ -204,6 +208,7 @@ describe("LayerZero", function () {
         let user: string;
 
         // Instances
+        let skaleTokenInstance: MockERC20;
         let cryptosTokenInstance: CryptosToken;
         let cryptosTokenPolygonInstance: CryptosTokenPolygon;
         let cryptosTokenSkaleInstance: CryptosTokenSkaleEuropa;
@@ -230,10 +235,16 @@ describe("LayerZero", function () {
                 await ethers.getSigners()).map(s => s.address);
 
             // Factories
+            const SkaleTokenFactory = await ethers.getContractFactory("MockERC20");
             const CryptosTokenFactory = await ethers.getContractFactory("CryptosToken");
             const CryptosTokenPolygonFactory = await ethers.getContractFactory("CryptosTokenPolygon");
             const CryptosTokenSkaleFactory = await ethers.getContractFactory("CryptosTokenSkaleEuropa");
             const LayerZeroEndpointFactory = await ethers.getContractFactory("MockLayerZeroEndpoint");
+            const LayerZeroEndpointAltFactory = await ethers.getContractFactory("MockLayerZeroEndpointAlt");
+
+            // Deploy tokens
+            skaleTokenInstance = await SkaleTokenFactory.deploy();
+            const skaleTokenAddress = await skaleTokenInstance.address;
             
             // Deploy endpoints
             const layerZeroEndpointEthereumInstance = await LayerZeroEndpointFactory.deploy(eidEthereum);
@@ -242,7 +253,7 @@ describe("LayerZero", function () {
             const layerZeroEndpointPolygonInstance = await LayerZeroEndpointFactory.deploy(eidPolygon);
             const layerZeroEndpointPolygonAddress = await layerZeroEndpointPolygonInstance.address;
 
-            const layerZeroEndpointSkaleInstance = await LayerZeroEndpointFactory.deploy(eidSkale);
+            const layerZeroEndpointSkaleInstance = await LayerZeroEndpointAltFactory.deploy(eidSkale, skaleTokenAddress);
             const layerZeroEndpointSkaleAddress = await layerZeroEndpointSkaleInstance.address;
 
             // Deploy tokens
@@ -434,7 +445,7 @@ describe("LayerZero", function () {
                 await ethers.getSigners()).map(s => s.address);
 
             // Factories
-            const skaleTokenFactory = await ethers.getContractFactory("MockERC20");
+            const SkaleTokenFactory = await ethers.getContractFactory("MockERC20");
             const CryptosTokenFactory = await ethers.getContractFactory("CryptosToken");
             const CryptosTokenPolygonFactory = await ethers.getContractFactory("CryptosTokenPolygon");
             const CryptosTokenSkaleFactory = await ethers.getContractFactory("CryptosTokenSkaleEuropa");
@@ -442,7 +453,7 @@ describe("LayerZero", function () {
             const LayerZeroEndpointAltFactory = await ethers.getContractFactory("MockLayerZeroEndpointAlt");
 
             // Deploy tokens
-            skaleTokenInstance = await skaleTokenFactory.deploy();
+            skaleTokenInstance = await SkaleTokenFactory.deploy();
             const skaleTokenAddress = await skaleTokenInstance.address;
             
             // Deploy endpoints

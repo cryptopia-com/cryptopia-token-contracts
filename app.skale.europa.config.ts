@@ -4,18 +4,19 @@ const config : AppConfig = {
     networks: {
         development: {
             layerZero: {
-                token: "CryptosTokenPolygon",
+                token: "CryptosTokenSkaleEuropa",
                 endpoint: {
-                    endpointId: 2,
-                    endpointLocation: "MockLayerZeroEndpoint",
+                    endpointId: 3,
+                    endpointLocation: "MockLayerZeroEndpointAlt",
+                    endpointAltToken: "MockLayerZeroEndpointAltToken",
                     endpointDestinations: [
                         {
                             destinationToken: "CryptosToken",
                             destinationEndpoint: "MockLayerZeroEndpoint:Ethereum"
                         },
                         {
-                            destinationToken: "CryptosTokenSkaleEuropa",
-                            destinationEndpoint: "MockLayerZeroEndpointAlt:Skale"
+                            destinationToken: "CryptosTokenPolygon",
+                            destinationEndpoint: "MockLayerZeroEndpoint:Polygon"
                         }
                     ]
                 },
@@ -25,20 +26,21 @@ const config : AppConfig = {
                         endpointId: 1,
                         token: "CryptosToken"
                     },
-                    skale: {
+                    polygon: {
                         network: "localhost",
-                        endpointId: 3,
-                        token: "CryptosTokenSkaleEuropa"
+                        endpointId: 2,
+                        token: "CryptosTokenPolygon"
                     }
                 }
             }
         },
-        polygonAmoy: {
+        skaleEuropaTestnet: {
             layerZero: {
-                token: "CryptosTokenPolygon",
+                token: "CryptosTokenSkaleEuropa",
                 endpoint: {
-                    endpointId: 40267,
-                    endpointLocation: "0x6edce65403992e310a62460808c4b910d972f10f"
+                    endpointId: 40273,
+                    endpointLocation: "0x82b7dc04A4ABCF2b4aE570F317dcab49f5a10f24",
+                    endpointAltToken: "0x",
                 },
                 peers: {
                     ethereum: {
@@ -46,20 +48,21 @@ const config : AppConfig = {
                         endpointId: 40161,
                         token: "CryptosToken"
                     },
-                    skale: {
-                        network: "skaleEuropaTestnet",
-                        endpointId: 40273,
-                        token: "CryptosTokenSkaleEuropa"
+                    polygon: {
+                        network: "polygonAmoy",
+                        endpointId: 40267,
+                        token: "CryptosTokenPolygon"
                     }
                 }
             }
         },
-        polygonMainnet: {
+        skaleEuropaMainnet: {
             layerZero: {
-                token: "CryptosTokenPolygon",
+                token: "CryptosTokenSkaleEuropa",
                 endpoint: {
-                    endpointId: 30109,
-                    endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c"
+                    endpointId: 30273,
+                    endpointLocation: "0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043",
+                    endpointAltToken: "0x",
                 },
                 peers: {
                     ethereum: {
@@ -67,10 +70,10 @@ const config : AppConfig = {
                         endpointId: 30101,
                         token: "CryptosToken"
                     },
-                    skale: {
-                        network: "skaleEuropaMainnet",
-                        endpointId: 30273,
-                        token: "CryptosTokenSkaleEuropa"
+                    polygon: {
+                        network: "polygonMainnet",
+                        endpointId: 30109,
+                        token: "CryptosTokenPolygon"
                     }
                 }
             }

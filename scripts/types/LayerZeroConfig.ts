@@ -12,6 +12,7 @@ export interface LayerZeroEndpointDestination {
 export interface LayerZeroEndpoint {
     endpointId: number,
     endpointLocation: string;
+    endpointAltToken?: string;
     endpointDestinations?: LayerZeroEndpointDestination[];
 }
 

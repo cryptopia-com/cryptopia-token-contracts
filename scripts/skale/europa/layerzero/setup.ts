@@ -1,29 +1,29 @@
 import ora from 'ora-classic';
 import chalk from 'chalk';
 import hre, { ethers } from "hardhat"; 
-import appConfig, { NetworkConfig } from "../../../app.polygon.config";
-import { DeploymentManager } from "../../helpers/deployments";
-import { waitForMinimumTime } from "../../helpers/timers";
+import appConfig, { NetworkConfig } from "../../../../app.skale.europa.config";
+import { DeploymentManager } from "../../../helpers/deployments";
+import { waitForMinimumTime } from "../../../helpers/timers";
 
 import { 
-    MockLayerZeroEndpoint,
-    CryptosTokenPolygon,
-} from "../../../typechain-types";
+    CryptosTokenSkaleEuropa,
+    MockLayerZeroEndpointAlt
+} from "../../../../typechain-types";
 
 // Settins
 const MIN_TIME = 100;
 
 let config: NetworkConfig;
 let deploymentManager: DeploymentManager;
-let tokenInstance: CryptosTokenPolygon;
-let mockEndpointInstance: MockLayerZeroEndpoint;
+let tokenInstance: CryptosTokenSkaleEuropa;
+let mockEndpointInstance: MockLayerZeroEndpointAlt;
 
 /**
  * Setup peers and endpoints
  * 
- * npx hardhat run --network localhost ./scripts/polygon/layerzero/setup.ts
- * npx hardhat run --network polygonAmoy ./scripts/polygon/layerzero/setup.ts
- * npx hardhat run --network polygonMainnet ./scripts/polygon/layerzero/setup.ts
+ * npx hardhat run --network localhost ./scripts/skale/europa/layerzero/setup.ts
+ * npx hardhat run --network skaleEuropaTestnet ./scripts/skale/europa/layerzero/setup.ts
+ * npx hardhat run --network skaleEuropaMainnet ./scripts/skale/europa/layerzero/setup.ts
  */
 async function main() {
 
@@ -39,8 +39,8 @@ async function main() {
 
     console.log(`\n\nStarting LayerZero setup on ${chalk.yellow(hre.network.name)}..`);
 
-    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenPolygon").address;
-    tokenInstance = await ethers.getContractAt("CryptosTokenPolygon", tokenAddress);
+    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenSkaleEuropa").address;
+    tokenInstance = await ethers.getContractAt("CryptosTokenSkaleEuropa", tokenAddress);
 
     const owner = await tokenInstance.owner();
     if (owner != deployer.address)
@@ -55,8 +55,8 @@ async function main() {
         config.layerZero.endpoint.endpointDestinations && 
         config.layerZero.endpoint.endpointDestinations?.length > 0)
     {
-        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpoint:Polygon").address;
-        mockEndpointInstance = await ethers.getContractAt("MockLayerZeroEndpoint", mockEndpointAddress);
+        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpointAlt:Skale").address;
+        mockEndpointInstance = await ethers.getContractAt("MockLayerZeroEndpointAlt", mockEndpointAddress);
 
         for (let destination of config.layerZero.endpoint.endpointDestinations)
         {

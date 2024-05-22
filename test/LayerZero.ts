@@ -46,7 +46,7 @@ describe("LayerZero", function () {
         // Settings
         const eidEthereum = 40161;
         const eidPolygon = 40109;
-        const eidSkale = 40254;
+        const eidSkale = 40273;
 
         const initialUserBalance = "100".toWei();
 
@@ -221,7 +221,7 @@ describe("LayerZero", function () {
         // Settings
         const eidEthereum = 40161;
         const eidPolygon = 40109;
-        const eidSkale = 40254;
+        const eidSkale = 40273;
 
         const initialUserBalance = "100".toWei();
 
@@ -430,7 +430,7 @@ describe("LayerZero", function () {
         // Settings
         const eidEthereum = 40161;
         const eidPolygon = 40109;
-        const eidSkale = 40254;
+        const eidSkale = 40273;
 
         const initialUserBalance = "100".toWei();
         const skaleTokenBalance = "100".toWei();

@@ -51,7 +51,7 @@ async function main() {
     //////////////////////////////////
     ///// Ensure Enpoint Setup ///////
     //////////////////////////////////
-    if (config.layerZero.endpoint.endpointLocation == "MockLayerZeroEndpoint" && 
+    if (!config.layerZero.endpoint.endpointLocation.startsWith("0x") && 
         config.layerZero.endpoint.endpointDestinations && 
         config.layerZero.endpoint.endpointDestinations?.length > 0)
     {

@@ -12,6 +12,10 @@ const config : AppConfig = {
                         {
                             destinationToken: "CryptosTokenPolygon",
                             destinationEndpoint: "MockLayerZeroEndpoint:Polygon"
+                        },
+                        {
+                            destinationToken: "CryptosTokenSkaleEuropa",
+                            destinationEndpoint: "MockLayerZeroEndpointAlt:Skale"
                         }
                     ]
                 },
@@ -20,6 +24,11 @@ const config : AppConfig = {
                         network: "localhost",
                         endpointId: 2,
                         token: "CryptosTokenPolygon"
+                    },
+                    skale: {
+                        network: "localhost",
+                        endpointId: 3,
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 }
             }
@@ -39,6 +48,11 @@ const config : AppConfig = {
                         network: "polygonAmoy",
                         endpointId: 40267,
                         token: "CryptosTokenPolygon"
+                    },
+                    skale: {
+                        network: "skaleEuropaTestnet",
+                        endpointId: 40273,
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 }
             }
@@ -52,13 +66,17 @@ const config : AppConfig = {
                 endpoint: {
                     endpointId: 30101,
                     endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c"
-                    
                 },
                 peers: {
                     polygon: {
                         network: "polygonMainnet",
                         endpointId: 30109,
                         token: "CryptosTokenPolygon"
+                    },
+                    skale: {
+                        network: "skaleEuropaMainnet",
+                        endpointId: 30273,
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 }
             }

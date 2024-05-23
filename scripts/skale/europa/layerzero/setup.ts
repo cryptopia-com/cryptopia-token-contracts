@@ -6,9 +6,17 @@ import { DeploymentManager } from "../../../helpers/deployments";
 import { waitForMinimumTime } from "../../../helpers/timers";
 
 import { 
+    Options 
+} from '@layerzerolabs/lz-v2-utilities';
+
+import { 
     CryptosTokenSkaleEuropa,
     MockLayerZeroEndpointAlt
 } from "../../../../typechain-types";
+
+import { 
+    EnforcedOptionParamStruct 
+} from "../../../typechain-types/contracts/source/skale/europa/CryptosTokenSkaleEuropa";
 
 // Settins
 const MIN_TIME = 100;
@@ -73,6 +81,12 @@ async function main() {
         await ensurePeerSet(peer.network, peer.endpointId, peer.token);
     }
 
+
+    //////////////////////////////////
+    ////// Ensure Options Set ////////
+    //////////////////////////////////
+    await ensureOptionsSet(config.layerZero.options, config.layerZero.peers);
+
     console.log(`\Ensured ${chalk.bold(Object.keys(config.layerZero.peers).length.toString())} peers were confiured on ${chalk.yellow(hre.network.name)}!\n\n`);
 }
 
@@ -101,6 +115,49 @@ async function ensurePeerSet(network: string, eid: number, peer: string): Promis
 
     await waitForMinimumTime(transactionStartTime, MIN_TIME);
     transactionLoader.succeed(`Configured ${chalk.green(peer)} as peer with endpoint ID ${chalk.blue(eid.toString())}`);
+}
+
+/**
+ * Ensure options are set
+ * 
+ * @param options Options
+ * @param peers Peers
+ */
+async function ensureOptionsSet(options: any, peers: any): Promise<void>
+{
+    const transactionLoader = ora(`Configuring options`).start();
+    const transactionStartTime = Date.now();
+
+    // Construct enforced options
+    let enforcedOptions: EnforcedOptionParamStruct[] = [];
+    for (let network of Object.keys(options))
+    {
+        const networkOptions = options[network];
+        const networkPeers = peers[network];
+
+        if (!networkPeers)
+        {
+            throw new Error(`No peers found for network ${network}`);
+        }
+
+        for (let executorLzReceiveOption of networkOptions.executorLzReceiveOptions)
+        {
+            enforcedOptions.push({
+                eid: networkPeers.endpointId,
+                msgType: executorLzReceiveOption.msgType,
+                options: Options.newOptions()
+                    .addExecutorLzReceiveOption(executorLzReceiveOption.gasLimit, 0)
+                    .toHex()
+                    .toString()
+            });
+        }
+    }
+
+    // Set enforced options
+    await tokenInstance.setEnforcedOptions(enforcedOptions);
+
+    await waitForMinimumTime(transactionStartTime, MIN_TIME);
+    transactionLoader.succeed(`Configured options`);
 }
 
 /**

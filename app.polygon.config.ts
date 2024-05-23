@@ -30,6 +30,24 @@ const config : AppConfig = {
                         endpointId: 3,
                         token: "CryptosTokenSkaleEuropa"
                     }
+                },
+                options: {
+                    ethereum: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    skale: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    }
                 }
             }
         },
@@ -51,6 +69,24 @@ const config : AppConfig = {
                         endpointId: 40273,
                         token: "CryptosTokenSkaleEuropa"
                     }
+                },
+                options: {
+                    ethereum: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    skale: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    }
                 }
             }
         },
@@ -71,6 +107,24 @@ const config : AppConfig = {
                         network: "skaleEuropaMainnet",
                         endpointId: 30273,
                         token: "CryptosTokenSkaleEuropa"
+                    }
+                },
+                options: {
+                    ethereum: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    skale: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
                     }
                 }
             }

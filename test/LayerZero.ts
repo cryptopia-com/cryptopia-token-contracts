@@ -15,8 +15,8 @@ import {
 
 import { 
     MessagingFeeStruct, 
-    SendParamStruct 
-} from "../typechain-types/contracts/source/ethereum/CryptosToken.js";
+    SendParamStruct,
+} from "../typechain-types/contracts/source/ethereum/CryptosToken";
 
 /**
  * Layer Zero
@@ -47,6 +47,7 @@ describe("LayerZero", function () {
         const eidEthereum = 40161;
         const eidPolygon = 40109;
         const eidSkale = 40273;
+        const lzReceiveGasLimit = 60000;
 
         const initialUserBalance = "100".toWei();
 
@@ -111,6 +112,54 @@ describe("LayerZero", function () {
             await cryptosTokenSkaleInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenAddress, 32));
             await cryptosTokenSkaleInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
 
+            // Setup enforced options
+            const requiredOptions = Options.newOptions()
+                .addExecutorLzReceiveOption(lzReceiveGasLimit, 0)
+                .toHex()
+                .toString();
+
+            await cryptosTokenInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidPolygon,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidSkale,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            await cryptosTokenPolygonInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidEthereum,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidSkale,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            await cryptosTokenSkaleInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidEthereum,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidPolygon,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
             // Fund user account
             await cryptosTokenInstance.transfer(user, initialUserBalance);
         });
@@ -120,17 +169,13 @@ describe("LayerZero", function () {
             // Setup
             const signer = await ethers.getSigner(user);
             const amountToTransfer = "60".toWei();
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
-                .toHex()
-                .toString();
 
             const sendParam: SendParamStruct = {
                 dstEid: eidPolygon,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: amountToTransfer,
                 minAmountLD: amountToTransfer,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };
@@ -159,17 +204,13 @@ describe("LayerZero", function () {
             // Setup
             const signer = await ethers.getSigner(user);
             const amountToTransfer = "25".toWei();
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
-                .toHex()
-                .toString();
 
             const sendParam: SendParamStruct = {
                 dstEid: eidSkale,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: amountToTransfer,
                 minAmountLD: amountToTransfer,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };
@@ -222,6 +263,7 @@ describe("LayerZero", function () {
         const eidEthereum = 40161;
         const eidPolygon = 40109;
         const eidSkale = 40273;
+        const lzReceiveGasLimit = 60000;
 
         const initialUserBalance = "100".toWei();
 
@@ -283,24 +325,69 @@ describe("LayerZero", function () {
             await cryptosTokenInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
             await cryptosTokenInstance.setPeer(eidSkale, ethers.utils.zeroPad(cryptosTokenSkaleAddress, 32));
 
+            await cryptosTokenInstance.setEnforcedOptions
+
             await cryptosTokenPolygonInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenAddress, 32));
             await cryptosTokenPolygonInstance.setPeer(eidSkale, ethers.utils.zeroPad(cryptosTokenSkaleAddress, 32));
 
             await cryptosTokenSkaleInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenAddress, 32));
             await cryptosTokenSkaleInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
 
-            // Fund user account
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
+            // Setup enforced options
+            const requiredOptions = Options.newOptions()
+                .addExecutorLzReceiveOption(lzReceiveGasLimit, 0)
                 .toHex()
                 .toString();
 
+            await cryptosTokenInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidPolygon,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidSkale,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            await cryptosTokenPolygonInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidEthereum,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidSkale,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            await cryptosTokenSkaleInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidEthereum,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidPolygon,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            // Fund user account
             const sendParam: SendParamStruct = {
                 dstEid: eidPolygon,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: initialUserBalance,
                 minAmountLD: initialUserBalance,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };
@@ -323,17 +410,13 @@ describe("LayerZero", function () {
             // Setup
             const signer = await ethers.getSigner(user);
             const amountToTransfer = "60".toWei();
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
-                .toHex()
-                .toString();
 
             const sendParam: SendParamStruct = {
                 dstEid: eidEthereum,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: amountToTransfer,
                 minAmountLD: amountToTransfer,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };
@@ -365,17 +448,13 @@ describe("LayerZero", function () {
             // Setup
             const signer = await ethers.getSigner(user);
             const amountToTransfer = "25".toWei();
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
-                .toHex()
-                .toString();
 
             const sendParam: SendParamStruct = {
                 dstEid: eidSkale,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: amountToTransfer,
                 minAmountLD: amountToTransfer,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };
@@ -431,6 +510,7 @@ describe("LayerZero", function () {
         const eidEthereum = 40161;
         const eidPolygon = 40109;
         const eidSkale = 40273;
+        const lzReceiveGasLimit = 60000;
 
         const initialUserBalance = "100".toWei();
         const skaleTokenBalance = "100".toWei();
@@ -496,20 +576,63 @@ describe("LayerZero", function () {
             await cryptosTokenSkaleInstance.setPeer(eidEthereum, ethers.utils.zeroPad(cryptosTokenAddress, 32));
             await cryptosTokenSkaleInstance.setPeer(eidPolygon, ethers.utils.zeroPad(cryptosTokenPolygonAddress, 32));
 
-            // Fund user account
-            await skaleTokenInstance.mint(user, skaleTokenBalance);
-
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
+            // Setup enforced options
+            const requiredOptions = Options.newOptions()
+                .addExecutorLzReceiveOption(lzReceiveGasLimit, 0)
                 .toHex()
                 .toString();
+
+            await cryptosTokenInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidPolygon,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidSkale,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            await cryptosTokenPolygonInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidEthereum,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidSkale,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            await cryptosTokenSkaleInstance.setEnforcedOptions(
+                [  
+                    {
+                        eid: eidEthereum,
+                        msgType: 1,
+                        options: requiredOptions
+                    },
+                    {
+                        eid: eidPolygon,
+                        msgType: 1,
+                        options: requiredOptions
+                    }
+                ]);
+
+            // Fund user account
+            await skaleTokenInstance.mint(user, skaleTokenBalance);
 
             const sendParam: SendParamStruct = {
                 dstEid: eidSkale,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: initialUserBalance,
                 minAmountLD: initialUserBalance,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };
@@ -531,17 +654,13 @@ describe("LayerZero", function () {
             // Setup
             const signer = await ethers.getSigner(user);
             const amountToTransfer = "50".toWei();
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
-                .toHex()
-                .toString();
 
             const sendParam: SendParamStruct = {
                 dstEid: eidEthereum,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: amountToTransfer,
                 minAmountLD: amountToTransfer,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };
@@ -581,17 +700,13 @@ describe("LayerZero", function () {
             // Setup
             const signer = await ethers.getSigner(user);
             const amountToTransfer = "25".toWei();
-            const extraOptions = Options.newOptions()
-                .addExecutorLzReceiveOption(200000, 0)
-                .toHex()
-                .toString();
 
             const sendParam: SendParamStruct = {
                 dstEid: eidPolygon,
                 to: ethers.utils.zeroPad(user, 32),
                 amountLD: amountToTransfer,
                 minAmountLD: amountToTransfer,
-                extraOptions: extraOptions,
+                extraOptions: `0x`,
                 composeMsg: `0x`,
                 oftCmd: `0x`
             };

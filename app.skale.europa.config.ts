@@ -31,6 +31,24 @@ const config : AppConfig = {
                         endpointId: 2,
                         token: "CryptosTokenPolygon"
                     }
+                },
+                options: {
+                    ethereum: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    polygon: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    }
                 }
             }
         },
@@ -53,6 +71,24 @@ const config : AppConfig = {
                         endpointId: 40267,
                         token: "CryptosTokenPolygon"
                     }
+                },
+                options: {
+                    ethereum: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    polygon: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    }
                 }
             }
         },
@@ -74,6 +110,24 @@ const config : AppConfig = {
                         network: "polygonMainnet",
                         endpointId: 30109,
                         token: "CryptosTokenPolygon"
+                    }
+                },
+                options: {
+                    ethereum: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    polygon: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
                     }
                 }
             }

@@ -4,10 +4,6 @@ import { LayerZeroConfig } from './scripts/types/LayerZeroConfig';
 import "@nomicfoundation/hardhat-toolbox";
 
 import { 
-  Options 
-} from '@layerzerolabs/lz-v2-utilities';
-
-import { 
   MessagingFeeStruct, 
   SendParamStruct 
 } from "./typechain-types/contracts/source/ethereum/CryptosToken.js";
@@ -250,17 +246,12 @@ task("bridge", "Transfer tokens between blockchains")
     }
 
     // Send the tokens
-    const extraOptions = Options.newOptions()
-        .addExecutorLzReceiveOption(200000, 0)
-        .toHex()
-        .toString();
-
     const sendParam: SendParamStruct = {
         dstEid: peer.endpointId,
         to: hre.ethers.utils.zeroPad(to, 32),
         amountLD: amountInWei,
         minAmountLD: amountInWei,
-        extraOptions: extraOptions,
+        extraOptions: `0x`,
         composeMsg: `0x`,
         oftCmd: `0x`
     };

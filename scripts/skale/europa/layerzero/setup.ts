@@ -16,7 +16,7 @@ import {
 
 import { 
     EnforcedOptionParamStruct 
-} from "../../../typechain-types/contracts/source/skale/europa/CryptosTokenSkaleEuropa";
+} from "../../../../typechain-types/contracts/source/skale/europa/CryptosTokenSkaleEuropa";
 
 // Settins
 const MIN_TIME = 100;
@@ -157,7 +157,7 @@ async function ensureOptionsSet(options: any, peers: any): Promise<void>
     await tokenInstance.setEnforcedOptions(enforcedOptions);
 
     await waitForMinimumTime(transactionStartTime, MIN_TIME);
-    transactionLoader.succeed(`Configured options`);
+    transactionLoader.succeed(`Configured ${chalk.blue(enforcedOptions.length)} options for ${chalk.green("CryptosTokenSkaleEuropa")}`);
 }
 
 /**

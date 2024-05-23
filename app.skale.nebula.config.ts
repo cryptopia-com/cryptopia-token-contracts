@@ -1,8 +1,8 @@
 const config : AppConfig = {
     networks: {
         development: {},
-        skaleEuropaTestnet: {},
-        skaleEuropaMainnet: {}
+        skaleNebulaTestnet: {},
+        skaleNebulaMainnet: {}
     }
 };
 

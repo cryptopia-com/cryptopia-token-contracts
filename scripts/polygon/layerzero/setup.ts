@@ -157,7 +157,7 @@ async function ensureOptionsSet(options: any, peers: any): Promise<void>
     await tokenInstance.setEnforcedOptions(enforcedOptions);
 
     await waitForMinimumTime(transactionStartTime, MIN_TIME);
-    transactionLoader.succeed(`Configured options`);
+    transactionLoader.succeed(`Configured ${chalk.blue(enforcedOptions.length)} options for ${chalk.green("CryptosTokenPolygon")}`);
 }
 
 /**

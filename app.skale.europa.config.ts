@@ -58,7 +58,7 @@ const config : AppConfig = {
                 endpoint: {
                     endpointId: 40273,
                     endpointLocation: "0x82b7dc04A4ABCF2b4aE570F317dcab49f5a10f24",
-                    endpointAltToken: "0x",
+                    endpointAltToken: "0x6c71319b1F910Cf989AD386CcD4f8CC8573027aB",
                 },
                 peers: {
                     ethereum: {
@@ -98,7 +98,7 @@ const config : AppConfig = {
                 endpoint: {
                     endpointId: 30273,
                     endpointLocation: "0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043",
-                    endpointAltToken: "0x",
+                    endpointAltToken: "0xE0595a049d02b7674572b0d59cd4880Db60EDC50",
                 },
                 peers: {
                     ethereum: {

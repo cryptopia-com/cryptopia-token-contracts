@@ -59,8 +59,8 @@ const config: HardhatUserConfig = {
       }
     },
     skaleNebulaTestnet: {
-      url: "https://staging-v3.skalenodes.com/v1/staging-faint-slimy-achird",
-      chainId: 503129905,
+      url: "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet",
+      chainId: 37084624,
       accounts: {
         mnemonic: secret.skaleNebulaTestnet.mnemonic,
         path: "m/44'/60'/0'/0",
@@ -122,10 +122,10 @@ const config: HardhatUserConfig = {
     customChains: [
       {
         network: "skaleNebulaTestnet",
-        chainId: 503129905,
+        chainId: 37084624,
         urls: {
-            apiURL: "https://staging-faint-slimy-achird.explorer.staging-v3.skalenodes.com/api",
-            browserURL: "https://staging-faint-slimy-achird.explorer.staging-v3.skalenodes.com"
+            apiURL: "https://lanky-ill-funny-testnet.explorer.testnet.skalenodes.com/api",
+            browserURL: "https://lanky-ill-funny-testnet.explorer.testnet.skalenodes.com"
         }
       },
       {
@@ -193,7 +193,7 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
  * npx hardhat bridge --network localhost --origin "polygon" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network localhost --origin "skale" --destination "ethereum" --amount "100"
  * 
- * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount "100"
+ * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "skale" --amount "1"
  * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "ethereum" --amount "100"
  * 

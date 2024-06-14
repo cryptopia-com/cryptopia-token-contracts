@@ -187,14 +187,116 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
 }
 
 /**
+ * Read the LZ config for a pathway
+ * 
+ * npx hardhat config --network localhost --origin "ethereum" --destination "skale"
+ * npx hardhat config --network localhost --origin "polygon" --destination "ethereum" 
+ * npx hardhat config --network localhost --origin "skale" --destination "ethereum" 
+ * 
+ * npx hardhat config --network ethereumSepolia --origin "ethereum" --destination "skale" 
+ * npx hardhat config --network polygonAmoy --origin "polygon" --destination "ethereum" 
+ * npx hardhat config --network skaleEuropaTestnet --origin "skale" --destination "ethereum" 
+ * 
+ * npx hardhat config --network ethereumMainnet --origin "ethereum" --destination "polygon" 
+ * npx hardhat config --network polygonMainnet --origin "polygon" --destination "ethereum" 
+ * npx hardhat config --network skaleEuropaMainnet --origin "skale" --destination "ethereum" 
+ */
+task("config", "Read the LZ config for a pathway")
+  .addParam("origin", "The origin of the pathway")
+  .addParam("destination", "The destination of the pathway")
+  .setAction(async (taskArguments, hre) =>
+  {
+    // Config
+    const isDevEnvironment = hre.network.name == "hardhat" 
+        || hre.network.name == "ganache" 
+        || hre.network.name == "localhost";
+
+    const chain =  taskArguments.origin[0].toUpperCase() + taskArguments.origin.slice(1);;
+    if (taskArguments.origin == "skale")
+    {
+        taskArguments.origin = "skale.europa";
+    }
+
+    const appConfig = await loadConfigAsync(taskArguments.origin);
+    const config = appConfig.networks[
+        isDevEnvironment ? "development" : hre.network.name];
+
+    const deploymentManger = new DeploymentManager(hre.network.name);
+    const peer = config.layerZero.peers[taskArguments.destination];
+    
+    const oappAddress = deploymentManger.getContractDeployment(
+     config.layerZero.adapter ? config.layerZero.adapter : config.layerZero.token).address;
+    const remoteEid = peer.endpointId; 
+
+    let ethereumLzEndpointAddress = config.layerZero.endpoint.endpointLocation;
+    if (!config.layerZero.endpoint.endpointLocation.startsWith("0x"))
+    {
+        ethereumLzEndpointAddress = deploymentManger.getContractDeployment(
+          `${config.layerZero.endpoint.endpointLocation}:${chain.charAt(0).toUpperCase() + chain.slice(1)}`).address;
+    }
+
+    const endpointInstance = await hre.ethers.getContractAt("ILayerZeroEndpointV2", ethereumLzEndpointAddress);
+    const sendLibAddress = await endpointInstance.getSendLibrary(oappAddress, remoteEid);
+    const receiveLibAddress = (await endpointInstance.getReceiveLibrary(oappAddress, remoteEid)).lib;
+    const executorConfigType = 1; // 1 for executor
+    const ulnConfigType = 2; // 2 for UlnConfig
+
+    try {
+      // Fetch and decode for sendLib (both Executor and ULN Config)
+      const sendExecutorConfigBytes = await endpointInstance.getConfig(
+        oappAddress,
+        sendLibAddress,
+        remoteEid,
+        executorConfigType,
+      );
+      const executorConfigAbi = ['tuple(uint32 maxMessageSize, address executorAddress)'];
+      const executorConfigArray = hre.ethers.utils.defaultAbiCoder.decode(
+        executorConfigAbi,
+        sendExecutorConfigBytes,
+      );
+      console.log('Send Library Executor Config:', executorConfigArray);
+  
+      const sendUlnConfigBytes = await endpointInstance.getConfig(
+        oappAddress,
+        sendLibAddress,
+        remoteEid,
+        ulnConfigType,
+      );
+      const ulnConfigStructType = [
+        'tuple(uint64 confirmations, uint8 requiredDVNCount, uint8 optionalDVNCount, uint8 optionalDVNThreshold, address[] requiredDVNs, address[] optionalDVNs)',
+      ];
+      const sendUlnConfigArray = hre.ethers.utils.defaultAbiCoder.decode(
+        ulnConfigStructType,
+        sendUlnConfigBytes,
+      );
+      console.log('Send Library ULN Config:', sendUlnConfigArray);
+  
+      // Fetch and decode for receiveLib (only ULN Config)
+      const receiveUlnConfigBytes = await endpointInstance.getConfig(
+        oappAddress,
+        receiveLibAddress,
+        remoteEid,
+        ulnConfigType,
+      );
+      const receiveUlnConfigArray = hre.ethers.utils.defaultAbiCoder.decode(
+        ulnConfigStructType,
+        receiveUlnConfigBytes,
+      );
+      console.log('Receive Library ULN Config:', receiveUlnConfigArray);
+    } catch (error) {
+      console.error('Error fetching or decoding config:', error);
+    }
+  });
+
+/**
  * Bridge tokens
  * 
  * npx hardhat bridge --network localhost --origin "ethereum" --destination "skale" --amount "100"
  * npx hardhat bridge --network localhost --origin "polygon" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network localhost --origin "skale" --destination "ethereum" --amount "100"
  * 
- * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "skale" --amount "1"
- * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "skale" --amount "9999"
+ * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "skale" --amount "1"
  * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "ethereum" --amount "100"
  * 
  * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "polygon" --amount "100"

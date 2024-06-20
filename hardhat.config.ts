@@ -299,8 +299,8 @@ task("config", "Read the LZ config for a pathway")
  * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "skale" --amount "1"
  * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "ethereum" --amount "100"
  * 
- * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "polygon" --amount "100"
- * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "skale" --amount "1"
+ * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "skale" --amount "1"
  * npx hardhat bridge --network skaleEuropaMainnet --origin "skale" --destination "ethereum" --amount "100"
  */
 task("bridge", "Transfer tokens between blockchains")

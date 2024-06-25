@@ -198,8 +198,8 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
  * npx hardhat config --network skaleEuropaTestnet --origin "skale" --destination "ethereum" 
  * 
  * npx hardhat config --network ethereumMainnet --origin "ethereum" --destination "polygon" 
- * npx hardhat config --network polygonMainnet --origin "polygon" --destination "ethereum" 
- * npx hardhat config --network skaleEuropaMainnet --origin "skale" --destination "ethereum" 
+ * npx hardhat config --network polygonMainnet --origin "polygon" --destination "skale" 
+ * npx hardhat config --network skaleEuropaMainnet --origin "skale" --destination "polygon" 
  */
 task("config", "Read the LZ config for a pathway")
   .addParam("origin", "The origin of the pathway")

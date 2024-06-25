@@ -13,6 +13,7 @@ const deploymentManager = new DeploymentManager(hre.network.name);
  */
 async function main() {
 
+    const isTestnet = hre.network.name.includes("Testnet");
     const contractName = "CryptosTokenSkaleEuropa";
     const deployment = deploymentManager.getContractDeployment(contractName);
     console.log(`\n\nVerifying ${chalk.green(contractName)} on ${chalk.yellow(hre.network.name)}`);
@@ -28,6 +29,9 @@ async function main() {
             await hre.run("verify:verify", {
                 address: deployment.address,
                 constructorArguments: deployment.constructorArguments,
+                contract: isTestnet 
+                    ? "contracts/test/skale/europa/DevelopmentTokenSkaleEuropa.sol:DevelopmentTokenSkaleEuropa" 
+                    : "contracts/source/skale/europa/CryptosTokenSkaleEuropa.sol:CryptosTokenSkaleEuropa"
             });
 
             ora(`Successfully verified`).succeed();

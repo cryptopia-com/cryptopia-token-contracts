@@ -11,5 +11,11 @@ npx hardhat run --network ethereumSepolia ./scripts/ethereum/layerzero/setup.ts
 npx hardhat run --network polygonAmoy ./scripts/polygon/layerzero/setup.ts 
 npx hardhat run --network skaleEuropaTestnet ./scripts/skale/europa/layerzero/setup.ts
 
+Verify: 
+npx hardhat run --network ethereumSepolia ./scripts/ethereum/verify.ts 
+npx hardhat run --network polygonAmoy ./scripts/polygon/verify.ts 
+npx hardhat run --network skaleEuropaTestnet ./scripts/skale/europa/verify.ts 
+npx hardhat run --network skaleNebulaTestnet ./scripts/skale/nebula/verify.ts
+
 Port: 
 npx hardhat run ./scripts/port.ts

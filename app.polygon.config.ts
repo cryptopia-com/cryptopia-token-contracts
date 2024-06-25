@@ -95,7 +95,39 @@ const config : AppConfig = {
                 token: "CryptosTokenPolygon",
                 endpoint: {
                     endpointId: 30109,
-                    endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c"
+                    endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c",
+                    config : {
+                        skale: {
+                            sendConfig: {
+                                executorConfig: {
+                                    maxMessageSize: 10000,
+                                    executorAddress: '0xCd3F213AD101472e1713C72B1697E727C803885b'
+                                },
+                                ulnConfig: {
+                                    confirmations: BigInt(10),
+                                    optionalDVNCount: 0,
+                                    requiredDVNCount: 1,
+                                    optionalDVNThreshold: 0,
+                                    requiredDVNs: [
+                                        "0x23DE2FE932d9043291f870324B74F820e11dc81A"
+                                    ],
+                                    optionalDVNs: []
+                                }
+                            },
+                            receiveConfig: {
+                                ulnConfig: {
+                                    confirmations: BigInt(10),
+                                    optionalDVNCount: 0,
+                                    requiredDVNCount: 1,
+                                    optionalDVNThreshold: 0,
+                                    requiredDVNs: [
+                                        "0x23DE2FE932d9043291f870324B74F820e11dc81A"
+                                    ],
+                                    optionalDVNs: []
+                                }
+                            }
+                        }
+                    }
                 },
                 peers: {
                     ethereum: {

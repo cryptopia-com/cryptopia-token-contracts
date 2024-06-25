@@ -59,6 +59,7 @@ async function main() {
     //////////////////////////////////
     ///// Ensure Enpoint Setup ///////
     //////////////////////////////////
+    let endpointLocation = config.layerZero.endpoint.endpointLocation;
     if (!config.layerZero.endpoint.endpointLocation.startsWith("0x") && 
         config.layerZero.endpoint.endpointDestinations && 
         config.layerZero.endpoint.endpointDestinations?.length > 0)
@@ -70,6 +71,8 @@ async function main() {
         {
             await ensureMockEndpointDestinationSet(destination.destinationToken, destination.destinationEndpoint);
         }
+
+        endpointLocation = mockEndpointAddress;
     }
 
 
@@ -86,6 +89,12 @@ async function main() {
     ////// Ensure Options Set ////////
     //////////////////////////////////
     await ensureOptionsSet(config.layerZero.options, config.layerZero.peers);
+
+
+    //////////////////////////////////
+    /// Ensure Endpoint Config Set ///
+    //////////////////////////////////
+    await ensureEndpointConfigSet(config.layerZero.endpoint.config, config.layerZero.peers, tokenAddress, endpointLocation);
 
     console.log(`\Ensured ${chalk.bold(Object.keys(config.layerZero.peers).length.toString())} peers were confiured on ${chalk.yellow(hre.network.name)}!\n\n`);
 }
@@ -158,6 +167,124 @@ async function ensureOptionsSet(options: any, peers: any): Promise<void>
 
     await waitForMinimumTime(transactionStartTime, MIN_TIME);
     transactionLoader.succeed(`Configured ${chalk.blue(enforcedOptions.length)} options for ${chalk.green("CryptosToken")}`);
+}
+
+/**
+ * Ensure endpoint consig is set
+ * 
+ * @param config Endpoint config
+ * @param peers Peers
+ * @param tokenAddress Token address
+ * @param endpointAddress Endpoint address
+ */
+async function ensureEndpointConfigSet(config: any, peers: any, tokenAddress: string, endpointAddress: string): Promise<void>
+{
+    const executorConfigType = 1; // 1 for ExecutorConfig
+    const configTypeExecutorStruct = 'tuple(uint32 maxMessageSize, address executorAddress)';
+
+    const ulnConfigType = 2; // 2 for UlnConfig
+    const ulnConfigTypeStruct = 'tuple(uint64 confirmations, uint8 requiredDVNCount, uint8 optionalDVNCount, uint8 optionalDVNThreshold, address[] requiredDVNs, address[] optionalDVNs)';
+
+    const endpointInstance = await hre.ethers.getContractAt("ILayerZeroEndpointV2", endpointAddress);
+
+    for (let network of Object.keys(config))
+    {
+        const networkConfig = config[network];
+        const networkPeer = peers[network];
+
+        if (!networkPeer)
+        {
+            throw new Error(`No peer found for network ${network}`);
+        }
+
+        if (!networkConfig)
+        {
+            continue;
+        }
+
+        if (!networkConfig.sendConfig)
+        {
+            throw new Error(`No send config found for network ${network}`);
+        }
+
+        if (!networkConfig.sendConfig.executorConfig)
+        {
+            throw new Error(`No send executor config found for network ${network}`);
+        }
+
+        if (!networkConfig.sendConfig.ulnConfig)
+        {
+            throw new Error(`No send uln config found for network ${network}`);
+        }
+
+        if (!networkConfig.receiveConfig)
+        {
+            throw new Error(`No receive config found for network ${network}`);
+        }
+
+        if (!networkConfig.receiveConfig.ulnConfig)
+        {
+            throw new Error(`No receive uln config found for network ${network}`);
+        }
+
+        // Send config
+        const transactionLoaderSend = ora(`Configuring send config for ${chalk.yellow(network)}`).start();
+        const transactionStartTimeSend = Date.now();
+
+        const ulnConfigEncodedSend = ethers.utils.defaultAbiCoder.encode(
+            [ulnConfigTypeStruct],
+            [networkConfig.sendConfig.ulnConfig]);
+
+        const setConfigParamUlnSend = {
+            eid: networkPeer.endpointId,
+            configType: ulnConfigType,
+            config: ulnConfigEncodedSend,
+        };
+
+        const executorConfigEncodedSend = ethers.utils.defaultAbiCoder.encode(
+            [configTypeExecutorStruct],
+            [networkConfig.sendConfig.executorConfig]);
+
+        const setConfigParamExecutorSend = {
+            eid: networkPeer.endpointId,
+            configType: executorConfigType,
+            config: executorConfigEncodedSend,
+        };
+
+        const sendLibAddress = await endpointInstance.getSendLibrary(tokenAddress, networkPeer.endpointId);
+        await endpointInstance.setConfig(tokenAddress, sendLibAddress, 
+        [
+            setConfigParamUlnSend,
+            setConfigParamExecutorSend
+        ]);
+
+        await waitForMinimumTime(transactionStartTimeSend, MIN_TIME);
+        transactionLoaderSend.succeed(`Configured send config for ${chalk.yellow(network)}`);
+
+
+        // Receive config
+        const transactionLoaderReceive = ora(`Configuring receive config for ${chalk.yellow(network)}`).start();
+        const transactionStartTimeReceive = Date.now();
+
+        const ulnConfigEncodedReceive = ethers.utils.defaultAbiCoder.encode(
+            [ulnConfigTypeStruct],
+            [networkConfig.receiveConfig.ulnConfig]);
+
+        const setConfigParamUlnReceive = {
+            eid: networkPeer.endpointId,
+            configType: ulnConfigType,
+            config: ulnConfigEncodedReceive,
+        };
+
+        const receiveLibAddress = (await endpointInstance.getReceiveLibrary(tokenAddress, networkPeer.endpointId)).lib;
+        await endpointInstance.setConfig(tokenAddress, receiveLibAddress, 
+        [
+            setConfigParamUlnReceive
+        ]);
+
+        await waitForMinimumTime(transactionStartTimeReceive, MIN_TIME);
+        transactionLoaderReceive.succeed(`Configured send config for ${chalk.yellow(network)}`);
+    }
 }
 
 /**

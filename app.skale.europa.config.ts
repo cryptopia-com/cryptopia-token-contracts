@@ -100,6 +100,36 @@ const config : AppConfig = {
                     endpointLocation: "0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043",
                     endpointAltToken: "0xE0595a049d02b7674572b0d59cd4880Db60EDC50",
                     config : {
+                        ethereum: {
+                            sendConfig: {
+                                executorConfig: {
+                                    maxMessageSize: 10000,
+                                    executorAddress: '0x4208D6E27538189bB48E603D6123A94b8Abe0A0b'
+                                },
+                                ulnConfig: {
+                                    confirmations: BigInt(10),
+                                    optionalDVNCount: 0,
+                                    requiredDVNCount: 1,
+                                    optionalDVNThreshold: 0,
+                                    requiredDVNs: [
+                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
+                                    ],
+                                    optionalDVNs: []
+                                }
+                            },
+                            receiveConfig: {
+                                ulnConfig: {
+                                    confirmations: BigInt(10),
+                                    optionalDVNCount: 0,
+                                    requiredDVNCount: 1,
+                                    optionalDVNThreshold: 0,
+                                    requiredDVNs: [
+                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
+                                    ],
+                                    optionalDVNs: []
+                                }
+                            }
+                        },
                         polygon: {
                             sendConfig: {
                                 executorConfig: {

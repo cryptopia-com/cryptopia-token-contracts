@@ -101,7 +101,39 @@ const config : AppConfig = {
                 token: "CryptosToken",
                 endpoint: {
                     endpointId: 30101,
-                    endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c"
+                    endpointLocation: "0x1a44076050125825900e736c501f859c50fe728c",
+                    config : {
+                        skale: {
+                            sendConfig: {
+                                executorConfig: {
+                                    maxMessageSize: 10000,
+                                    executorAddress: '0x173272739Bd7Aa6e4e214714048a9fE699453059'
+                                },
+                                ulnConfig: {
+                                    confirmations: BigInt(10),
+                                    optionalDVNCount: 0,
+                                    requiredDVNCount: 1,
+                                    optionalDVNThreshold: 0,
+                                    requiredDVNs: [
+                                        "0x589dEDbD617e0CBcB916A9223F4d1300c294236b"
+                                    ],
+                                    optionalDVNs: []
+                                }
+                            },
+                            receiveConfig: {
+                                ulnConfig: {
+                                    confirmations: BigInt(10),
+                                    optionalDVNCount: 0,
+                                    requiredDVNCount: 1,
+                                    optionalDVNThreshold: 0,
+                                    requiredDVNs: [
+                                        "0x589dEDbD617e0CBcB916A9223F4d1300c294236b"
+                                    ],
+                                    optionalDVNs: []
+                                }
+                            }
+                        }
+                    }
                 },
                 peers: {
                     polygon: {

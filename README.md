@@ -1,3 +1,5 @@
+![CI](https://github.com/cryptopia-com/cryptopia-token-contracts/actions/workflows/hardhat-ci.yml/badge.svg?branch=development)
+
 # Cryptopia Token Contracts
 
 ## Overview

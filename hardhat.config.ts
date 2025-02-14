@@ -9,11 +9,16 @@ import {
 } from "./typechain-types/contracts/source/ethereum/CryptosToken.js";
 import { DeploymentManager } from "./scripts/helpers/deployments";
 
-const secret = JSON.parse(
-  require('fs')
-    .readFileSync(".secret")
-    .toString()
-    .trim());
+let secret: any = {};
+try {
+  secret = JSON.parse(
+    require('fs')
+      .readFileSync(".secret")
+      .toString()
+      .trim());
+} catch (error) {
+  console.warn("Warning: .secret file is missing. Using empty config.");
+}
 
 const config: HardhatUserConfig = {
   networks: {

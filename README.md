@@ -1,4 +1,4 @@
-![CI](https://github.com/cryptopia-com/cryptopia-token-contracts/actions/workflows/hardhat-ci.yml/badge.svg?branch=development)
+![CI](https://github.com/cryptopia-com/cryptopia-token-contracts/actions/workflows/hardhat-ci.yml/badge.svg?branch=main)
 
 # Cryptopia Token Contracts
 

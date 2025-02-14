@@ -27,7 +27,7 @@ const config: HardhatUserConfig = {
       url: "https://go.getblock.io/b4c5e41104bc47feb4993830c820957f",
       chainId: 11155111,
       accounts: {
-        mnemonic: secret.ethereumSepolia.mnemonic,
+        mnemonic: secret?.ethereumSepolia?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -37,7 +37,7 @@ const config: HardhatUserConfig = {
       url: "https://go.getblock.io/ea6c212105ae468591a146a082da2e93",
       chainId: 1,
       accounts: {
-        mnemonic: secret.ethereumMainnet.mnemonic,
+        mnemonic: secret?.ethereumMainnet?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
       url: "https://go.getblock.io/07d076840042416eb75709631abdb21a",
       chainId: 80002,
       accounts: {
-        mnemonic: secret.polygonAmoy.mnemonic,
+        mnemonic: secret?.polygonAmoy?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -57,7 +57,7 @@ const config: HardhatUserConfig = {
       url: "https://go.getblock.io/8e9b429a2cc7420b8f68297565f5ab82",
       chainId: 137,
       accounts: {
-        mnemonic: secret.polygonMainnet.mnemonic,
+        mnemonic: secret?.polygonMainnet?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -67,7 +67,7 @@ const config: HardhatUserConfig = {
       url: "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet",
       chainId: 37084624,
       accounts: {
-        mnemonic: secret.skaleNebulaTestnet.mnemonic,
+        mnemonic: secret?.skaleNebulaTestnet?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -77,7 +77,7 @@ const config: HardhatUserConfig = {
       url: "https://mainnet.skalenodes.com/v1/green-giddy-denebola",
       chainId: 1482601649,
       accounts: {
-        mnemonic: secret.skaleNebulaMainnet.mnemonic,
+        mnemonic: secret?.skaleNebulaMainnet?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -87,7 +87,7 @@ const config: HardhatUserConfig = {
       url: "https://testnet.skalenodes.com/v1/juicy-low-small-testnet",
       chainId: 1444673419,
       accounts: {
-        mnemonic: secret.skaleEuropaTestnet.mnemonic,
+        mnemonic: secret?.skaleEuropaTestnet?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -97,7 +97,7 @@ const config: HardhatUserConfig = {
       url: "https://mainnet.skalenodes.com/v1/elated-tan-skat",
       chainId: 2046399126,
       accounts: {
-        mnemonic: secret.skaleEuropaMainnet.mnemonic,
+        mnemonic: secret?.skaleEuropaMainnet?.etherscan ?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -115,14 +115,14 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      mainnet: secret.ethereumMainnet.etherscan,
-      sepolia: secret.ethereumSepolia.etherscan,
-      polygon: secret.polygonMainnet.etherscan,
-      polygonAmoy: secret.polygonAmoy.etherscan,
-      skaleNebulaTestnet: secret.skaleNebulaTestnet.etherscan,
-      skaleNebulaMainnet: secret.skaleNebulaMainnet.etherscan,
-      skaleEuropaTestnet: secret.skaleEuropaTestnet.etherscan,
-      skaleEuropaMainnet: secret.skaleEuropaMainnet.etherscan
+      mainnet: secret?.ethereumMainnet?.etherscan ?? "na",
+      sepolia: secret?.ethereumSepolia?.etherscan ?? "na",
+      polygon: secret?.polygonMainnet?.etherscan ?? "na",
+      polygonAmoy: secret?.polygonAmoy?.etherscan ?? "na",
+      skaleNebulaTestnet: secret?.skaleNebulaTestnet?.etherscan ?? "na",
+      skaleNebulaMainnet: secret?.skaleNebulaMainnet?.etherscan ?? "na",
+      skaleEuropaTestnet: secret?.skaleEuropaTestnet?.etherscan ?? "na",
+      skaleEuropaMainnet: secret?.skaleEuropaMainnet?.etherscan ?? "na"
     },
     customChains: [
       {

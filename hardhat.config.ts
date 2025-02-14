@@ -97,6 +97,26 @@ const config: HardhatUserConfig = {
         initialIndex: 0,
         count: 10
       }
+    },
+    bnbTestnet: {
+      url: "https://go.getblock.io/fef55b6226f4473da06828eac36d65b6",
+      chainId: 97,
+      accounts: {
+        mnemonic: secret.bnbTestnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
+    },
+    bnbMainnet: {
+      url: "https://go.getblock.io/9658e8ee67d1435bb1474ab6b15c25ff",
+      chainId: 56,
+      accounts: {
+        mnemonic: secret.bnbMainnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
     }
   },
   solidity: {
@@ -117,7 +137,9 @@ const config: HardhatUserConfig = {
       skaleNebulaTestnet: secret.skaleNebulaTestnet.etherscan,
       skaleNebulaMainnet: secret.skaleNebulaMainnet.etherscan,
       skaleEuropaTestnet: secret.skaleEuropaTestnet.etherscan,
-      skaleEuropaMainnet: secret.skaleEuropaMainnet.etherscan
+      skaleEuropaMainnet: secret.skaleEuropaMainnet.etherscan,
+      bnbMainnet: secret.bnbMainnet.etherscan,
+      bnbTestnet: secret.bnbTestnet.etherscan
     },
     customChains: [
       {

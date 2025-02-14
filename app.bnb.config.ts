@@ -4,11 +4,10 @@ const config : AppConfig = {
     networks: {
         development: {
             layerZero: {
-                token: "CryptosTokenSkaleEuropa",
+                token: "CryptosTokenBNB",
                 endpoint: {
-                    endpointId: 3,
-                    endpointLocation: "MockLayerZeroEndpointAlt",
-                    endpointAltToken: "MockLayerZeroEndpointAltToken",
+                    endpointId: 4,
+                    endpointLocation: "MockLayerZeroEndpoint",
                     endpointDestinations: [
                         {
                             destinationToken: "CryptosToken",
@@ -19,8 +18,8 @@ const config : AppConfig = {
                             destinationEndpoint: "MockLayerZeroEndpoint:Polygon"
                         },
                         {
-                            destinationToken: "CryptosTokenBNB",
-                            destinationEndpoint: "MockLayerZeroEndpoint:BNB"
+                            destinationToken: "CryptosTokenSkaleEuropa",
+                            destinationEndpoint: "MockLayerZeroEndpointAlt:Skale"
                         }
                     ]
                 },
@@ -35,10 +34,10 @@ const config : AppConfig = {
                         endpointId: 2,
                         token: "CryptosTokenPolygon"
                     },
-                    bnb: {
+                    skale: {
                         network: "localhost",
-                        endpointId: 2,
-                        token: "CryptosTokenBNB"
+                        endpointId: 3,
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 },
                 options: {
@@ -58,7 +57,7 @@ const config : AppConfig = {
                             }
                         ]
                     },
-                    bnb: {
+                    skale: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -69,13 +68,12 @@ const config : AppConfig = {
                 }
             }
         },
-        skaleEuropaTestnet: {
+        bnbTestnet: {
             layerZero: {
-                token: "CryptosTokenSkaleEuropa",
+                token: "CryptosTokenBNB",
                 endpoint: {
-                    endpointId: 40273,
-                    endpointLocation: "0x82b7dc04A4ABCF2b4aE570F317dcab49f5a10f24",
-                    endpointAltToken: "0x6c71319b1F910Cf989AD386CcD4f8CC8573027aB"
+                    endpointId: 40102,
+                    endpointLocation: "0x6edce65403992e310a62460808c4b910d972f10f"
                 },
                 peers: {
                     ethereum: {
@@ -88,10 +86,10 @@ const config : AppConfig = {
                         endpointId: 40267,
                         token: "CryptosTokenPolygon"
                     },
-                    bnb: {
-                        network: "bnbTestnet",
-                        endpointId: 40102,
-                        token: "CryptosTokenBNB"
+                    skale: {
+                        network: "skaleEuropaTestnet",
+                        endpointId: 40273,
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 },
                 options: {
@@ -111,7 +109,7 @@ const config : AppConfig = {
                             }
                         ]
                     },
-                    bnb: {
+                    skale: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -122,19 +120,18 @@ const config : AppConfig = {
                 }
             }
         },
-        skaleEuropaMainnet: {
+        bnbMainnet: {
             layerZero: {
-                token: "CryptosTokenSkaleEuropa",
+                token: "CryptosTokenBNB",
                 endpoint: {
-                    endpointId: 30273,
-                    endpointLocation: "0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043",
-                    endpointAltToken: "0xE0595a049d02b7674572b0d59cd4880Db60EDC50",
+                    endpointId: 30102,
+                    endpointLocation: "0x1a44076050125825900e736c501f859c50fE728c",
                     config : {
-                        ethereum: {
+                        skale: {
                             sendConfig: {
                                 executorConfig: {
                                     maxMessageSize: 10000,
-                                    executorAddress: '0x4208D6E27538189bB48E603D6123A94b8Abe0A0b'
+                                    executorAddress: '0x3ebD570ed38B1b3b4BC886999fcF507e9D584859'
                                 },
                                 ulnConfig: {
                                     confirmations: BigInt(10),
@@ -142,7 +139,7 @@ const config : AppConfig = {
                                     requiredDVNCount: 1,
                                     optionalDVNThreshold: 0,
                                     requiredDVNs: [
-                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
+                                        "0xfd6865c841c2d64565562fcc7e05e619a30615f0"
                                     ],
                                     optionalDVNs: []
                                 }
@@ -154,67 +151,7 @@ const config : AppConfig = {
                                     requiredDVNCount: 1,
                                     optionalDVNThreshold: 0,
                                     requiredDVNs: [
-                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
-                                    ],
-                                    optionalDVNs: []
-                                }
-                            }
-                        },
-                        polygon: {
-                            sendConfig: {
-                                executorConfig: {
-                                    maxMessageSize: 10000,
-                                    executorAddress: '0x4208D6E27538189bB48E603D6123A94b8Abe0A0b'
-                                },
-                                ulnConfig: {
-                                    confirmations: BigInt(10),
-                                    optionalDVNCount: 0,
-                                    requiredDVNCount: 1,
-                                    optionalDVNThreshold: 0,
-                                    requiredDVNs: [
-                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
-                                    ],
-                                    optionalDVNs: []
-                                }
-                            },
-                            receiveConfig: {
-                                ulnConfig: {
-                                    confirmations: BigInt(10),
-                                    optionalDVNCount: 0,
-                                    requiredDVNCount: 1,
-                                    optionalDVNThreshold: 0,
-                                    requiredDVNs: [
-                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
-                                    ],
-                                    optionalDVNs: []
-                                }
-                            }
-                        },
-                        bnb: {
-                            sendConfig: {
-                                executorConfig: {
-                                    maxMessageSize: 10000,
-                                    executorAddress: '0x4208D6E27538189bB48E603D6123A94b8Abe0A0b'
-                                },
-                                ulnConfig: {
-                                    confirmations: BigInt(10),
-                                    optionalDVNCount: 0,
-                                    requiredDVNCount: 1,
-                                    optionalDVNThreshold: 0,
-                                    requiredDVNs: [
-                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
-                                    ],
-                                    optionalDVNs: []
-                                }
-                            },
-                            receiveConfig: {
-                                ulnConfig: {
-                                    confirmations: BigInt(10),
-                                    optionalDVNCount: 0,
-                                    requiredDVNCount: 1,
-                                    optionalDVNThreshold: 0,
-                                    requiredDVNs: [
-                                        "0xce8358bc28dd8296Ce8cAF1CD2b44787abd65887"
+                                        "0xfd6865c841c2d64565562fcc7e05e619a30615f0"
                                     ],
                                     optionalDVNs: []
                                 }
@@ -233,10 +170,10 @@ const config : AppConfig = {
                         endpointId: 30109,
                         token: "CryptosTokenPolygon"
                     },
-                    bnb: {
-                        network: "bnbMainnet",
-                        endpointId: 30102,
-                        token: "CryptosTokenBNB"
+                    skale: {
+                        network: "skaleEuropaMainnet",
+                        endpointId: 30273,
+                        token: "CryptosTokenSkaleEuropa"
                     }
                 },
                 options: {
@@ -256,7 +193,7 @@ const config : AppConfig = {
                             }
                         ]
                     },
-                    bnb: {
+                    skale: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,

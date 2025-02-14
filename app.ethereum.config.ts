@@ -16,6 +16,10 @@ const config : AppConfig = {
                         {
                             destinationToken: "CryptosTokenSkaleEuropa",
                             destinationEndpoint: "MockLayerZeroEndpointAlt:Skale"
+                        },
+                        {
+                            destinationToken: "CryptosTokenBNB",
+                            destinationEndpoint: "MockLayerZeroEndpoint:BNB"
                         }
                     ]
                 },
@@ -29,6 +33,11 @@ const config : AppConfig = {
                         network: "localhost",
                         endpointId: 3,
                         token: "CryptosTokenSkaleEuropa"
+                    },
+                    bnb: {
+                        network: "localhost",
+                        endpointId: 4,
+                        token: "CryptosTokenBNB"
                     }
                 },
                 options: {
@@ -41,6 +50,14 @@ const config : AppConfig = {
                         ]
                     },
                     skale: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    bnb: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -71,6 +88,11 @@ const config : AppConfig = {
                         network: "skaleEuropaTestnet",
                         endpointId: 40273,
                         token: "CryptosTokenSkaleEuropa"
+                    },
+                    bnb: {
+                        network: "bnbTestnet",
+                        endpointId: 40102,
+                        token: "CryptosTokenBNB"
                     }
                 },
                 options: {
@@ -83,6 +105,14 @@ const config : AppConfig = {
                         ]
                     },
                     skale: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    bnb: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -145,6 +175,11 @@ const config : AppConfig = {
                         network: "skaleEuropaMainnet",
                         endpointId: 30273,
                         token: "CryptosTokenSkaleEuropa"
+                    },
+                    bnb: {
+                        network: "bnbMainnet",
+                        endpointId: 30102,
+                        token: "CryptosTokenBNB"
                     }
                 },
                 options: {
@@ -157,6 +192,14 @@ const config : AppConfig = {
                         ]
                     },
                     skale: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    bnb: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,

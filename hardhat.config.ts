@@ -142,7 +142,8 @@ const config: HardhatUserConfig = {
       skaleNebulaTestnet: secret?.skaleNebulaTestnet?.etherscan ?? "na",
       skaleNebulaMainnet: secret?.skaleNebulaMainnet?.etherscan ?? "na",
       skaleEuropaTestnet: secret?.skaleEuropaTestnet?.etherscan ?? "na",
-      skaleEuropaMainnet: secret?.skaleEuropaMainnet?.etherscan ?? "na"
+      skaleEuropaMainnet: secret?.skaleEuropaMainnet?.etherscan ?? "na",
+      bscTestnet: secret?.bnbTestnet?.etherscan ?? "na"
     },
     customChains: [
       {
@@ -218,9 +219,10 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
  * npx hardhat config --network localhost --origin "polygon" --destination "ethereum" 
  * npx hardhat config --network localhost --origin "skale" --destination "ethereum" 
  * 
- * npx hardhat config --network ethereumSepolia --origin "ethereum" --destination "skale" 
+ * npx hardhat config --network ethereumSepolia --origin "ethereum" --destination "bnb" 
  * npx hardhat config --network polygonAmoy --origin "polygon" --destination "ethereum" 
  * npx hardhat config --network skaleEuropaTestnet --origin "skale" --destination "ethereum" 
+ * npx hardhat config --network bnbTestnet --origin "bnb" --destination "ethereum" 
  * 
  * npx hardhat config --network ethereumMainnet --origin "ethereum" --destination "skale" 
  * npx hardhat config --network polygonMainnet --origin "polygon" --destination "skale" 
@@ -316,13 +318,13 @@ task("config", "Read the LZ config for a pathway")
 /**
  * Bridge tokens
  * 
- * npx hardhat bridge --network localhost --origin "ethereum" --destination "skale" --amount "100"
+ * npx hardhat bridge --network localhost --origin "ethereum" --destination "bnb" --amount "100"
  * npx hardhat bridge --network localhost --origin "polygon" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network localhost --origin "skale" --destination "ethereum" --amount "100"
  * 
- * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "skale" --amount "9999"
- * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "skale" --amount "1"
- * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount "1"
+ * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "bnb" --amount "1"
+ * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "bnb" --amount "1"
  * 
  * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "skale" --amount "1"
  * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "skale" --amount "1"
@@ -406,7 +408,8 @@ task("bridge", "Transfer tokens between blockchains")
 
       const nativeTokenInstance = await hre.ethers.getContractAt("ERC20", nativeTokenAddress);
       const allowance = await nativeTokenInstance.allowance(from, originOFTAddress);
-      if (allowance < nativeFee)
+
+      if (allowance.lt(nativeFee))
       {
         await nativeTokenInstance.approve(originOFTAddress, nativeFee.sub(allowance));
       }
@@ -425,14 +428,17 @@ task("bridge", "Transfer tokens between blockchains")
    * npx hardhat balance --network localhost --chain "ethereum" 
    * npx hardhat balance --network localhost --chain "polygon" 
    * npx hardhat balance --network localhost --chain "skale" 
+   * npx hardhat balance --network localhost --chain "bnb" 
    * 
    * npx hardhat balance --network ethereumSepolia --chain "ethereum" 
    * npx hardhat balance --network polygonAmoy --chain "polygon" 
    * npx hardhat balance --network skaleEuropaTestnet --chain "skale" 
+   * npx hardhat balance --network bnbTestnet --chain "bnb" 
    * 
    * npx hardhat balance --network ethereumMainnet --chain "ethereum" 
    * npx hardhat balance --network polygonMainnet --chain "polygon" 
    * npx hardhat balance --network skaleEuropaMainnet --chain "skale" 
+   * npx hardhat balance --network bnbMainnet --chain "bnb" 
    */
   task("balance", "Get the balance of the specified account")
   .addParam("chain", "The chain to get the balance on")

@@ -166,7 +166,7 @@ async function ensureOptionsSet(options: any, peers: any): Promise<void>
     await tokenInstance.setEnforcedOptions(enforcedOptions);
 
     await waitForMinimumTime(transactionStartTime, MIN_TIME);
-    transactionLoader.succeed(`Configured ${chalk.blue(enforcedOptions.length)} options for ${chalk.green("CryptosTokenPolygon")}`);
+    transactionLoader.succeed(`Configured ${chalk.blue(enforcedOptions.length)} options for ${chalk.green("CryptosTokenBNB")}`);
 }
 
 /**
@@ -179,6 +179,11 @@ async function ensureOptionsSet(options: any, peers: any): Promise<void>
  */
 async function ensureEndpointConfigSet(config: any, peers: any, tokenAddress: string, endpointAddress: string): Promise<void>
 {
+    if (!config)
+    {
+        return Promise.resolve();
+    }
+
     const executorConfigType = 1; // 1 for ExecutorConfig
     const configTypeExecutorStruct = 'tuple(uint32 maxMessageSize, address executorAddress)';
 

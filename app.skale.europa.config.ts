@@ -41,7 +41,7 @@ const config : AppConfig = {
                     },
                     bnb: {
                         network: "localhost",
-                        endpointId: 2,
+                        endpointId: 4,
                         token: "CryptosTokenBNB"
                     },
                     base: {

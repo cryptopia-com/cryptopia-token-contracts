@@ -4,9 +4,9 @@ const config : AppConfig = {
     networks: {
         development: {
             layerZero: {
-                token: "CryptosTokenBNB",
+                token: "CryptosTokenBase",
                 endpoint: {
-                    endpointId: 4,
+                    endpointId: 5,
                     endpointLocation: "MockLayerZeroEndpoint",
                     endpointDestinations: [
                         {
@@ -22,8 +22,8 @@ const config : AppConfig = {
                             destinationEndpoint: "MockLayerZeroEndpointAlt:Skale"
                         },
                         {
-                            destinationToken: "CryptosTokenBase",
-                            destinationEndpoint: "MockLayerZeroEndpoint:Base"
+                            destinationToken: "CryptosTokenBNB",
+                            destinationEndpoint: "MockLayerZeroEndpoint:BNB"
                         }
                     ]
                 },
@@ -43,10 +43,10 @@ const config : AppConfig = {
                         endpointId: 3,
                         token: "CryptosTokenSkaleEuropa"
                     },
-                    base: {
+                    bnb: {
                         network: "localhost",
-                        endpointId: 5,
-                        token: "CryptosTokenBase"
+                        endpointId: 4,
+                        token: "CryptosTokenBNB"
                     }
                 },
                 options: {
@@ -74,7 +74,7 @@ const config : AppConfig = {
                             }
                         ]
                     },
-                    base: {
+                    bnb: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -85,12 +85,12 @@ const config : AppConfig = {
                 }
             }
         },
-        bnbTestnet: {
+        baseTestnet: {
             layerZero: {
-                token: "CryptosTokenBNB",
+                token: "CryptosTokenBase",
                 endpoint: {
-                    endpointId: 40102,
-                    endpointLocation: "0x6edce65403992e310a62460808c4b910d972f10f"
+                    endpointId: 40245,
+                    endpointLocation: "0x6EDCE65403992e310A62460808c4b910D972f10f"
                 },
                 peers: {
                     ethereum: {
@@ -108,10 +108,10 @@ const config : AppConfig = {
                         endpointId: 40273,
                         token: "CryptosTokenSkaleEuropa"
                     },
-                    base: {
-                        network: "baseTestnet",
-                        endpointId: 40245,
-                        token: "CryptosTokenBase"
+                    bnb: {
+                        network: "bnbTestnet",
+                        endpointId: 40102,
+                        token: "CryptosTokenBNB"
                     }
                 },
                 options: {
@@ -139,7 +139,7 @@ const config : AppConfig = {
                             }
                         ]
                     },
-                    base: {
+                    bnb: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -150,18 +150,18 @@ const config : AppConfig = {
                 }
             }
         },
-        bnbMainnet: {
+        baseMainnet: {
             layerZero: {
-                token: "CryptosTokenBNB",
+                token: "CryptosTokenBase",
                 endpoint: {
-                    endpointId: 30102,
+                    endpointId: 30184,
                     endpointLocation: "0x1a44076050125825900e736c501f859c50fE728c",
                     config : {
                         skale: {
                             sendConfig: {
                                 executorConfig: {
                                     maxMessageSize: 10000,
-                                    executorAddress: '0x3ebD570ed38B1b3b4BC886999fcF507e9D584859'
+                                    executorAddress: '0xCd3F213AD101472e1713C72B1697E727C803885b'
                                 },
                                 ulnConfig: {
                                     confirmations: BigInt(10),
@@ -169,7 +169,7 @@ const config : AppConfig = {
                                     requiredDVNCount: 1,
                                     optionalDVNThreshold: 0,
                                     requiredDVNs: [
-                                        "0xfd6865c841c2d64565562fcc7e05e619a30615f0"
+                                        "0x23DE2FE932d9043291f870324B74F820e11dc81A"
                                     ],
                                     optionalDVNs: []
                                 }
@@ -181,7 +181,7 @@ const config : AppConfig = {
                                     requiredDVNCount: 1,
                                     optionalDVNThreshold: 0,
                                     requiredDVNs: [
-                                        "0xfd6865c841c2d64565562fcc7e05e619a30615f0"
+                                        "0x23DE2FE932d9043291f870324B74F820e11dc81A"
                                     ],
                                     optionalDVNs: []
                                 }
@@ -205,10 +205,10 @@ const config : AppConfig = {
                         endpointId: 30273,
                         token: "CryptosTokenSkaleEuropa"
                     },
-                    base: {
-                        network: "baseMainnet",
-                        endpointId: 30184,
-                        token: "CryptosTokenBase"
+                    bnb: {
+                        network: "bnbMainnet",
+                        endpointId: 30102,
+                        token: "CryptosTokenBNB"
                     }
                 },
                 options: {
@@ -236,7 +236,7 @@ const config : AppConfig = {
                             }
                         ]
                     },
-                    base: {
+                    bnb: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,

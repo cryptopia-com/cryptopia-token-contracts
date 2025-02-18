@@ -20,6 +20,10 @@ const config : AppConfig = {
                         {
                             destinationToken: "CryptosTokenBNB",
                             destinationEndpoint: "MockLayerZeroEndpoint:BNB"
+                        },
+                        {
+                            destinationToken: "CryptosTokenBase",
+                            destinationEndpoint: "MockLayerZeroEndpoint:Base"
                         }
                     ]
                 },
@@ -38,6 +42,11 @@ const config : AppConfig = {
                         network: "localhost",
                         endpointId: 4,
                         token: "CryptosTokenBNB"
+                    },
+                    base: {
+                        network: "localhost",
+                        endpointId: 5,
+                        token: "CryptosTokenBase"
                     }
                 },
                 options: {
@@ -58,6 +67,14 @@ const config : AppConfig = {
                         ]
                     },
                     bnb: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    base: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -93,6 +110,11 @@ const config : AppConfig = {
                         network: "bnbTestnet",
                         endpointId: 40102,
                         token: "CryptosTokenBNB"
+                    },
+                    base: {
+                        network: "baseTestnet",
+                        endpointId: 40245,
+                        token: "CryptosTokenBase"
                     }
                 },
                 options: {
@@ -113,6 +135,14 @@ const config : AppConfig = {
                         ]
                     },
                     bnb: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    base: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
@@ -180,6 +210,11 @@ const config : AppConfig = {
                         network: "bnbMainnet",
                         endpointId: 30102,
                         token: "CryptosTokenBNB"
+                    },
+                    base: {
+                        network: "baseMainnet",
+                        endpointId: 30184,
+                        token: "CryptosTokenBase"
                     }
                 },
                 options: {
@@ -200,6 +235,14 @@ const config : AppConfig = {
                         ]
                     },
                     bnb: {
+                        executorLzReceiveOptions: [
+                            {
+                                msgType: 1,
+                                gasLimit: 60000
+                            }
+                        ]
+                    },
+                    base: {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,

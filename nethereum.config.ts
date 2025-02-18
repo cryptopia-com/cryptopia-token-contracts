@@ -9,7 +9,11 @@ const config : NethereumConfig =
         "CryptopiaTokenRetriever",
         "CryptosToken",
         "CryptosTokenOFTAdapter",
-        "CryptosTokenPolygon"
+        "CryptosTokenPolygon",
+        "CryptosTokenSkaleEuropa",
+        "CryptosTokenSkaleNebula",
+        "CryptosTokenBNB",
+        "CryptosTokenBase"
     ]
 }
 

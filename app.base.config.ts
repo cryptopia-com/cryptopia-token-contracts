@@ -155,7 +155,7 @@ const config : AppConfig = {
                 token: "CryptosTokenBase",
                 endpoint: {
                     endpointId: 30184,
-                    endpointLocation: "0x4208D6E27538189bB48E603D6123A94b8Abe0A0b",
+                    endpointLocation: "0x1a44076050125825900e736c501f859c50fE728c",
                     config : {
                         skale: {
                             sendConfig: {

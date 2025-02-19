@@ -124,10 +124,10 @@ const config: HardhatUserConfig = {
       }
     },
     baseTestnet: {
-      url: "https://go.getblock.io/560a0090e18a48fc95ddb0d8169cad62",
+      url: "https://api.developer.coinbase.com/rpc/v1/base-sepolia/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr", //"https://go.getblock.io/560a0090e18a48fc95ddb0d8169cad62",
       chainId: 84532,
       accounts: {
-        mnemonic: secret.bnbTestnet.mnemonic,
+        mnemonic: secret.baseTestnet.mnemonic,
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -137,7 +137,7 @@ const config: HardhatUserConfig = {
       url: "https://go.getblock.io/f7560f08bcde41abbbf1f8393a68df96",
       chainId: 8453,
       accounts: {
-        mnemonic: secret.bnbMainnet.mnemonic,
+        mnemonic: secret.baseMainnet.mnemonic,
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -346,15 +346,15 @@ task("config", "Read the LZ config for a pathway")
 /**
  * Bridge tokens
  * 
- * npx hardhat bridge --network localhost --origin "ethereum" --destination "bnb" --amount "100"
+ * npx hardhat bridge --network localhost --origin "ethereum" --destination "base" --amount "100"
  * npx hardhat bridge --network localhost --origin "polygon" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network localhost --origin "skale" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network localhost --origin "bnb" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network localhost --origin "base" --destination "ethereum" --amount "100"
  * 
- * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "polygon" --amount "1"
+ * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "base" --amount "15"
  * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "ethereum" --amount "1"
- * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "ethereum" --amount "1"
+ * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "bnb" --amount "100"
  * npx hardhat bridge --network bnbTestnet --origin "bnb" --destination "ethereum" --amount "1"
  * npx hardhat bridge --network baseTestnet --origin "base" --destination "ethereum" --amount "1"
  * 

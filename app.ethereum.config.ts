@@ -54,7 +54,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -62,7 +62,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -70,7 +70,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -78,7 +78,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     }
@@ -122,7 +122,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -130,7 +130,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -138,7 +138,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -146,7 +146,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     }
@@ -222,7 +222,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -230,7 +230,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -238,7 +238,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     },
@@ -246,7 +246,7 @@ const config : AppConfig = {
                         executorLzReceiveOptions: [
                             {
                                 msgType: 1,
-                                gasLimit: 60000
+                                gasLimit: 200000
                             }
                         ]
                     }

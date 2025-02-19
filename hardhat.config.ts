@@ -124,7 +124,7 @@ const config: HardhatUserConfig = {
       }
     },
     baseTestnet: {
-      url: "https://api.developer.coinbase.com/rpc/v1/base-sepolia/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr", //"https://go.getblock.io/560a0090e18a48fc95ddb0d8169cad62",
+      url: "https://api.developer.coinbase.com/rpc/v1/base-sepolia/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr", 
       chainId: 84532,
       accounts: {
         mnemonic: secret.baseTestnet.mnemonic,
@@ -134,7 +134,7 @@ const config: HardhatUserConfig = {
       }
     },
     baseMainnet: {
-      url: "https://go.getblock.io/f7560f08bcde41abbbf1f8393a68df96",
+      url: "https://api.developer.coinbase.com/rpc/v1/base/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr",
       chainId: 8453,
       accounts: {
         mnemonic: secret.baseMainnet.mnemonic,

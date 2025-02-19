@@ -1,7 +1,7 @@
 import ora from 'ora-classic';
 import chalk from 'chalk';
 import hre, { ethers } from "hardhat"; 
-import appConfig, { NetworkConfig } from "../../../app.polygon.config";
+import appConfig, { NetworkConfig } from "../../../app.base.config";
 import { DeploymentManager } from "../../helpers/deployments";
 import { waitForMinimumTime } from "../../helpers/timers";
 
@@ -11,27 +11,27 @@ import {
 
 import { 
     MockLayerZeroEndpoint,
-    CryptosTokenPolygon,
+    CryptosTokenBase,
 } from "../../../typechain-types";
 
 import { 
     EnforcedOptionParamStruct 
-} from "../../../typechain-types/contracts/source/polygon/CryptosTokenPolygon";
+} from "../../../typechain-types/contracts/source/base/CryptosTokenBase";
 
 // Settins
 const MIN_TIME = 100;
 
 let config: NetworkConfig;
 let deploymentManager: DeploymentManager;
-let tokenInstance: CryptosTokenPolygon;
+let tokenInstance: CryptosTokenBase;
 let mockEndpointInstance: MockLayerZeroEndpoint;
 
 /**
  * Setup peers and endpoints
  * 
- * npx hardhat run --network localhost ./scripts/polygon/layerzero/setup.ts
- * npx hardhat run --network polygonAmoy ./scripts/polygon/layerzero/setup.ts
- * npx hardhat run --network polygonMainnet ./scripts/polygon/layerzero/setup.ts
+ * npx hardhat run --network localhost ./scripts/base/layerzero/setup.ts
+ * npx hardhat run --network baseTestnet ./scripts/base/layerzero/setup.ts
+ * npx hardhat run --network baseMainnet ./scripts/base/layerzero/setup.ts
  */
 async function main() {
 
@@ -47,8 +47,8 @@ async function main() {
 
     console.log(`\n\nStarting LayerZero setup on ${chalk.yellow(hre.network.name)}..`);
 
-    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenPolygon").address;
-    tokenInstance = await ethers.getContractAt("CryptosTokenPolygon", tokenAddress);
+    const tokenAddress = deploymentManager.getContractDeployment("CryptosTokenBase").address;
+    tokenInstance = await ethers.getContractAt("CryptosTokenBase", tokenAddress);
 
     const owner = await tokenInstance.owner();
     if (owner != deployer.address)
@@ -64,7 +64,7 @@ async function main() {
         config.layerZero.endpoint.endpointDestinations && 
         config.layerZero.endpoint.endpointDestinations?.length > 0)
     {
-        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpoint:Polygon").address;
+        const mockEndpointAddress = deploymentManager.getContractDeployment("MockLayerZeroEndpoint:Base").address;
         mockEndpointInstance = await ethers.getContractAt("MockLayerZeroEndpoint", mockEndpointAddress);
 
         for (let destination of config.layerZero.endpoint.endpointDestinations)
@@ -166,7 +166,7 @@ async function ensureOptionsSet(options: any, peers: any): Promise<void>
     await tokenInstance.setEnforcedOptions(enforcedOptions);
 
     await waitForMinimumTime(transactionStartTime, MIN_TIME);
-    transactionLoader.succeed(`Configured ${chalk.blue(enforcedOptions.length)} options for ${chalk.green("CryptosTokenPolygon")}`);
+    transactionLoader.succeed(`Configured ${chalk.blue(enforcedOptions.length)} options for ${chalk.green("CryptosTokenBase")}`);
 }
 
 /**

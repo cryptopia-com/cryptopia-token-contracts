@@ -180,6 +180,11 @@ async function ensureOptionsSet(options: any, peers: any): Promise<void>
  */
 async function ensureEndpointConfigSet(config: any, peers: any, tokenAddress: string, endpointAddress: string): Promise<void>
 {
+    if (!config)
+    {
+        return Promise.resolve();
+    }
+
     const executorConfigType = 1; // 1 for ExecutorConfig
     const configTypeExecutorStruct = 'tuple(uint32 maxMessageSize, address executorAddress)';
 

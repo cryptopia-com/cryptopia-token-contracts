@@ -102,6 +102,46 @@ const config: HardhatUserConfig = {
         initialIndex: 0,
         count: 10
       }
+    },
+    bnbTestnet: {
+      url: "https://go.getblock.io/fef55b6226f4473da06828eac36d65b6",
+      chainId: 97,
+      accounts: {
+        mnemonic: secret.bnbTestnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
+    },
+    bnbMainnet: {
+      url: "https://go.getblock.io/9658e8ee67d1435bb1474ab6b15c25ff",
+      chainId: 56,
+      accounts: {
+        mnemonic: secret.bnbMainnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
+    },
+    baseTestnet: {
+      url: "https://api.developer.coinbase.com/rpc/v1/base-sepolia/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr", 
+      chainId: 84532,
+      accounts: {
+        mnemonic: secret.baseTestnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
+    },
+    baseMainnet: {
+      url: "https://api.developer.coinbase.com/rpc/v1/base/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr",
+      chainId: 8453,
+      accounts: {
+        mnemonic: secret.baseMainnet.mnemonic,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 10
+      }
     }
   },
   solidity: {
@@ -122,7 +162,11 @@ const config: HardhatUserConfig = {
       skaleNebulaTestnet: secret?.skaleNebulaTestnet?.etherscan ?? "na",
       skaleNebulaMainnet: secret?.skaleNebulaMainnet?.etherscan ?? "na",
       skaleEuropaTestnet: secret?.skaleEuropaTestnet?.etherscan ?? "na",
-      skaleEuropaMainnet: secret?.skaleEuropaMainnet?.etherscan ?? "na"
+      skaleEuropaMainnet: secret?.skaleEuropaMainnet?.etherscan ?? "na",
+      bscTestnet: secret?.bnbTestnet?.etherscan ?? "na",
+      bscMainnet: secret?.bnbMainnet?.etherscan ?? "na",
+      baseTestnet: secret?.baseTestnet?.etherscan ?? "na",
+      baseMainnet: secret?.baseMainnet?.etherscan ?? "na"
     },
     customChains: [
       {
@@ -197,14 +241,20 @@ async function loadConfigAsync(network: string) : Promise<AppConfig>
  * npx hardhat config --network localhost --origin "ethereum" --destination "skale"
  * npx hardhat config --network localhost --origin "polygon" --destination "ethereum" 
  * npx hardhat config --network localhost --origin "skale" --destination "ethereum" 
+ * npx hardhat config --network localhost --origin "bnb" --destination "ethereum" 
+ * npx hardhat config --network localhost --origin "base" --destination "ethereum" 
  * 
- * npx hardhat config --network ethereumSepolia --origin "ethereum" --destination "skale" 
+ * npx hardhat config --network ethereumSepolia --origin "ethereum" --destination "bnb" 
  * npx hardhat config --network polygonAmoy --origin "polygon" --destination "ethereum" 
  * npx hardhat config --network skaleEuropaTestnet --origin "skale" --destination "ethereum" 
+ * npx hardhat config --network bnbTestnet --origin "bnb" --destination "ethereum" 
+ * npx hardhat config --network baseTestnet --origin "base" --destination "ethereum" 
  * 
  * npx hardhat config --network ethereumMainnet --origin "ethereum" --destination "skale" 
- * npx hardhat config --network polygonMainnet --origin "polygon" --destination "skale" 
+ * npx hardhat config --network polygonMainnet --origin "polygon" --destination "ethereum" 
  * npx hardhat config --network skaleEuropaMainnet --origin "skale" --destination "ethereum" 
+ * npx hardhat config --network bnbMainnet --origin "bnb" --destination "ethereum"
+ * npx hardhat config --network baseMainnet --origin "base" --destination "ethereum"
  */
 task("config", "Read the LZ config for a pathway")
   .addParam("origin", "The origin of the pathway")
@@ -296,17 +346,23 @@ task("config", "Read the LZ config for a pathway")
 /**
  * Bridge tokens
  * 
- * npx hardhat bridge --network localhost --origin "ethereum" --destination "skale" --amount "100"
+ * npx hardhat bridge --network localhost --origin "ethereum" --destination "base" --amount "100"
  * npx hardhat bridge --network localhost --origin "polygon" --destination "ethereum" --amount "100"
  * npx hardhat bridge --network localhost --origin "skale" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network localhost --origin "bnb" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network localhost --origin "base" --destination "ethereum" --amount "100"
  * 
- * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "skale" --amount "9999"
- * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "skale" --amount "1"
- * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network ethereumSepolia --origin "ethereum" --destination "base" --amount "15"
+ * npx hardhat bridge --network polygonAmoy --origin "polygon" --destination "ethereum" --amount "1"
+ * npx hardhat bridge --network skaleEuropaTestnet --origin "skale" --destination "bnb" --amount "100"
+ * npx hardhat bridge --network bnbTestnet --origin "bnb" --destination "ethereum" --amount "1"
+ * npx hardhat bridge --network baseTestnet --origin "base" --destination "ethereum" --amount "1"
  * 
  * npx hardhat bridge --network ethereumMainnet --origin "ethereum" --destination "skale" --amount "1"
- * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "skale" --amount "1"
- * npx hardhat bridge --network skaleEuropaMainnet --origin "skale" --destination "ethereum" --amount "100"
+ * npx hardhat bridge --network polygonMainnet --origin "polygon" --destination "ethereum" --amount "1"
+ * npx hardhat bridge --network skaleEuropaMainnet --origin "skale" --destination "ethereum" --amount "1"
+ * npx hardhat bridge --network bnbMainnet --origin "bnb" --destination "ethereum" --amount "1"
+ * npx hardhat bridge --network baseMainnet --origin "base" --destination "ethereum" --amount "1"
  */
 task("bridge", "Transfer tokens between blockchains")
   .addParam("origin", "The network to bridge from")
@@ -386,7 +442,8 @@ task("bridge", "Transfer tokens between blockchains")
 
       const nativeTokenInstance = await hre.ethers.getContractAt("ERC20", nativeTokenAddress);
       const allowance = await nativeTokenInstance.allowance(from, originOFTAddress);
-      if (allowance < nativeFee)
+
+      if (allowance.lt(nativeFee))
       {
         await nativeTokenInstance.approve(originOFTAddress, nativeFee.sub(allowance));
       }
@@ -405,14 +462,20 @@ task("bridge", "Transfer tokens between blockchains")
    * npx hardhat balance --network localhost --chain "ethereum" 
    * npx hardhat balance --network localhost --chain "polygon" 
    * npx hardhat balance --network localhost --chain "skale" 
+   * npx hardhat balance --network localhost --chain "bnb" 
+   * npx hardhat balance --network localhost --chain "base" 
    * 
    * npx hardhat balance --network ethereumSepolia --chain "ethereum" 
    * npx hardhat balance --network polygonAmoy --chain "polygon" 
    * npx hardhat balance --network skaleEuropaTestnet --chain "skale" 
+   * npx hardhat balance --network bnbTestnet --chain "bnb" 
+   * npx hardhat balance --network baseTestnet --chain "base" 
    * 
    * npx hardhat balance --network ethereumMainnet --chain "ethereum" 
    * npx hardhat balance --network polygonMainnet --chain "polygon" 
    * npx hardhat balance --network skaleEuropaMainnet --chain "skale" 
+   * npx hardhat balance --network bnbMainnet --chain "bnb" 
+   * npx hardhat balance --network baseMainnet --chain "base" 
    */
   task("balance", "Get the balance of the specified account")
   .addParam("chain", "The chain to get the balance on")

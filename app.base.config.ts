@@ -155,13 +155,13 @@ const config : AppConfig = {
                 token: "CryptosTokenBase",
                 endpoint: {
                     endpointId: 30184,
-                    endpointLocation: "0x1a44076050125825900e736c501f859c50fE728c",
+                    endpointLocation: "0x4208D6E27538189bB48E603D6123A94b8Abe0A0b",
                     config : {
                         skale: {
                             sendConfig: {
                                 executorConfig: {
                                     maxMessageSize: 10000,
-                                    executorAddress: '0xCd3F213AD101472e1713C72B1697E727C803885b'
+                                    executorAddress: '0x2CCA08ae69E0C44b18a57Ab2A87644234dAebaE4'
                                 },
                                 ulnConfig: {
                                     confirmations: BigInt(10),
@@ -169,7 +169,7 @@ const config : AppConfig = {
                                     requiredDVNCount: 1,
                                     optionalDVNThreshold: 0,
                                     requiredDVNs: [
-                                        "0x23DE2FE932d9043291f870324B74F820e11dc81A"
+                                        "0x9e059a54699a285714207b43b055483e78faac25"
                                     ],
                                     optionalDVNs: []
                                 }
@@ -181,7 +181,7 @@ const config : AppConfig = {
                                     requiredDVNCount: 1,
                                     optionalDVNThreshold: 0,
                                     requiredDVNs: [
-                                        "0x23DE2FE932d9043291f870324B74F820e11dc81A"
+                                        "0x9e059a54699a285714207b43b055483e78faac25"
                                     ],
                                     optionalDVNs: []
                                 }

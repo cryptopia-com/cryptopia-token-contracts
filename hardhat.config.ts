@@ -107,7 +107,7 @@ const config: HardhatUserConfig = {
       url: "https://go.getblock.io/fef55b6226f4473da06828eac36d65b6",
       chainId: 97,
       accounts: {
-        mnemonic: secret.bnbTestnet.mnemonic,
+        mnemonic: secret?.bnbTestnet?.mnemonic?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -117,7 +117,7 @@ const config: HardhatUserConfig = {
       url: "https://go.getblock.io/9658e8ee67d1435bb1474ab6b15c25ff",
       chainId: 56,
       accounts: {
-        mnemonic: secret.bnbMainnet.mnemonic,
+        mnemonic: secret?.bnbMainnet?.mnemonic?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -127,7 +127,7 @@ const config: HardhatUserConfig = {
       url: "https://api.developer.coinbase.com/rpc/v1/base-sepolia/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr", 
       chainId: 84532,
       accounts: {
-        mnemonic: secret.baseTestnet.mnemonic,
+        mnemonic: secret?.baseTestnet?.mnemonic?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10
@@ -137,7 +137,7 @@ const config: HardhatUserConfig = {
       url: "https://api.developer.coinbase.com/rpc/v1/base/42NuBJYeW6EkFtg4mH6i1A3oklsabyrr",
       chainId: 8453,
       accounts: {
-        mnemonic: secret.baseMainnet.mnemonic,
+        mnemonic: secret?.baseMainnet?.mnemonic?? "",
         path: "m/44'/60'/0'/0",
         initialIndex: 0,
         count: 10

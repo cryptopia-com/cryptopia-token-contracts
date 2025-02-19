@@ -288,7 +288,7 @@ async function ensureEndpointConfigSet(config: any, peers: any, tokenAddress: st
         ]);
 
         await waitForMinimumTime(transactionStartTimeReceive, MIN_TIME);
-        transactionLoaderReceive.succeed(`Configured send config for ${chalk.yellow(network)}`);
+        transactionLoaderReceive.succeed(`Configured receive config for ${chalk.yellow(network)}`);
     }
 }
 
